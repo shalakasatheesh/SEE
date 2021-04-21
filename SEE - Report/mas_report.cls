@@ -66,6 +66,7 @@
 
 \usepackage{lipsum} % Used to test
 \usepackage{lmodern}%
+\usepackage{minted} %Make the python look pretty
 
 \onehalfspacing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -15,18 +15,435 @@
     
     \section{Design of Robot}
     {
-    \subsection{Marking stop positions}
-    \subsection{Ensuring identical start positions}
+    \begin{itemize}
+        \item Our robot, 'Rosa' is designed using the \textbf{Lego Mindstorms EV3}(evolution 3) kit. Figure \ref{fig:Rosa front view} shows our final design, with the measurement facility for the robot intact. 
+        
+        \begin{figure}[!ht] %the h places the image nicely if the scale fits
+            \centering
+            \includegraphics[scale=0.2]{images/FrontView.jpeg}
+            \caption{Rosa - Front View}
+            \label{fig:Rosa front view}
+        \end{figure}
+        
+        \begin{figure}[!ht] %the h places the image nicely if the scale fits
+            \centering
+            \includegraphics[scale=0.2]{images/TopView3.jpeg}
+            \caption{Rosa - Top View}
+            \label{fig:Rosa top view}
+        \end{figure}
+        
+        \item The following are the materials used for building Rosa:
+        \begin{itemize}
+            \item[1.] Lego EV3 kit
+            \item[2.] Focusable Laser Module (2 units)
+            \item[3.] Jumpers for powering the laser modules
+        \end{itemize}
+        
+        \item The robot is three-wheeled with a differential drive configuration. In this configuration (Figure \ref{fig:Rosa Side View}), two of the wheels placed in front of the robot on either sides, have independent actuators. The last wheel in the back, is a castor wheel which is non-driven placed for increasing the stability of the bot.
+        
+        \begin{figure}[!ht] %the h places the image nicely if the scale fits
+            \centering
+            \includegraphics[scale=0.2]{images/SideView.jpeg}
+            \caption{Rosa - Side View}
+            \label{fig:Rosa Side View}
+        \end{figure}
+        
+        \item Commands for forward, right and left motions are made from the EV3 controller which is placed on top of the base of the bot.
+        
+        \item The measurements of the bot's motions are made on top a A1 sized grid sheet (grid size = ~2.5 cm). 
+        
+        \begin{figure}[!ht] %the h places the image nicely if the scale fits
+            \centering
+            \includegraphics[scale=0.2]{images/Measurement Facility.jpeg}
+            \caption{Rosa on the grid sheet}
+            \label{fig:Method of measuring grid}
+        \end{figure}
+        
+        \begin{figure}[!ht] %the h places the image nicely if the scale fits
+            \centering
+            \includegraphics[scale=0.8]{images/Measurement Facility2.png}
+            \caption{Rosa with the measurement facility}
+            \label{fig:Method of measuring}
+        \end{figure}
+        
+        \item The measurement is done by using two focussable \textbf{laser modules} with a resolution of 1mm placed in the front of the robot.
+        
+        \item The two cross lasers provide precise marking of the pose of the robot. The aperture is 9.1 cm above ground, and 5.9 cm in front of the main axis. The distance between the two lasers is 14.8 cm. 
+        
+        \item Since the lasers are working with 5V we are able to use the robots USB port for power supply, which makes any additional batteries unnecessary. 
+
+        \item The \textbf{pose} of the robot described by the vector $[x, y, \theta]^T$ is the \textbf{measurand}. Here, $(x, y)$ represents the \textbf{translation} of the robot which is measured in \textbf{millimeters} and $\theta$ represents it's \textbf{orientation} which is the \textbf{measurement result} obtained from the measured translation, in \textbf{degrees}.
+
+        \item The Figure \ref{fig:Method of measuring} represents the distances between the two cross lasers and the center of the robot. 
+
+        
+        % ADD FIGURE
+        
+        \item Further explanations about the measurement facility is provided in section 1.3 Measurement Process
+        
+        \item \textbf{Ensuring identical start positions}:
+        \begin{itemize}
+            \item[1.] Securing the A1 grid sheet to a wooden plank with tape to prevent errors from changes in it's position. % ADD FIGURE
+            \item[2.] Marking the start points with the help of laser crosses of the resolution 1mm.
+        \end{itemize}
+        
+        \item \textbf{{Marking stop positions}}:
+        \begin{itemize}
+            \item[1.] The stop positions are marked with the help of the laser crosses, rulers and pencils on the grid.
+            % ADD FIGURE
+        \end{itemize}
+    \end{itemize}
+    
     }
     
     \section{Measurement Process}
+        \begin{itemize}
+            \item The cross lasers allow us to mark easily positions on the supplied grid paper.
+            
+            \begin{itemize}
+                \item [1.]	
+            The robot gets put onto the start position. For this we are using the lasers to position the robot exactly on its start position marks. For a faster positioning, we use a wooden plank on the back of the start position for guidance. (see attached files)
+            \item [2.] We start the robot's program and let it run.
+            \item [3.] Using a ruler we make small cross marks at both laser positions. Each cross marks get a number for later data survey.
+            \item [4.] The process (2 and 3) is repeated until enough data is gathered.
+            \item [5.] Now the cross marks needs to be measured. Each position is measured using a coordinate system with the start position of the left laser as point of origin.
+            \end{itemize}
+            
+            \item  We define the coordinate system of the robot as following: 
+            \item The origin of the robot will lie on the mid point of the axial line connecting the wheels as seen on Figure \ref{fig:Dimensions of the robot} 
+            
+            \begin{figure}[!ht] 
+                        \centering \includegraphics[scale=0.5]{"images/robot_dimensions.png}
+                        \caption{Dimensions of the robot}
+                        \label{fig:Dimensions of the robot}
+                 \end{figure}
+            
+            
+            \item The start position will always be set by aligning the left laser marker on a pre-marked position on the grid. The global coordinate system will also originate from this point, even when measuring the laser crosses for translation and orientation change.
+            
+            \item Since the magnitude change of x and y ($\Delta x$  \& $\Delta y$) will be the same for for markers and the origin of the robot, we just have to account for the offset. The change in orientation will be the same and requires no additional calculations. See Figure \ref{fig:Robot orientation} for details.
+            
+            
+            \begin{figure}[!ht] 
+                        \centering \includegraphics[scale=0.3]{"images/robot_orientation2.png}
+                        \caption{Robot orientation}
+                        \label{fig:Robot orientation}
+                 \end{figure}
+            
+            
+        \end{itemize}
+        
+        
+                
+    
     {
     \subsection{Estimate of Error}
+    
+        \begin{itemize}
+            \item The robot's distance measurements will be subjected to many errors. Some of them are listed below along with the rough estimate of their precision:
+            
+            \begin{itemize}
+                \item[1.] Parallax error when marking the laser cross =  $\pm 2mm$
+                
+                \item[2.] Parallax error when measuring the laser cross with the ruler = $\pm 1mm$
+                
+                \item[3.] Pressing the button pushes the robot from one position and can put extra weight on one side of the wheel = $\pm 2mm$
+                
+                \item[4.] Slippage: during multiple runs the laser markers can slightly change position = $\pm 1mm$
+                
+                \item[5.] If the grid is not held tightly there will be folds and the surface will not be flat = $\pm 1mm$
+                
+                \item[6.] Jerk: The sudden deceleration of the robot can overshoot the robot past its position specially if the momentum of the controller. This will not be same in every run. = $\pm 2mm$ 
+            \end{itemize}
+            
+        \end{itemize}
+    
+    
+    
+    
+    
     }
     
     \section{Error Propagation}
     {
+        \begin{itemize}
+            \item The errors mentioned above will propagate when making the distance measurements. This can be easily calculated using a Jacobian.
+            
+            \item Since there are 4 variables namely $x_1,x_2,y_1,y_2$ (refer Figure \ref{fig:Robot orientation} for naming convention), the error associated to each of them contribute to the propagated error.
+            
+            \item The orientation is given by the equation \ref{Angle calculation}. Due to the alignment of our lasers we find $\frac{\pi}{2}-\theta$ instead of directly finding $\theta$:
+            \begin{equation}\label{Angle calculation}
+                \frac{\pi}{2}-\theta=arctan(\frac{y_2-y_1}{x_2-x_1})
+            \end{equation}
+            
+            \item If the variable matrix is defined as:
+            \begin{equation}\label{Variable Matrix}
+                \begin{bmatrix}x_{1}\\x_{2}\\y_{1}\\y_{2}\end{bmatrix}
+            \end{equation}
+            
+            \item Then the Jacobin will be:
+          
+            
+            
+           $$ \begin{bmatrix}\label{Jacobian}- \frac{y_{1} - y_{2}}{\left(- x_{1} + x_{2}\right)^{2} + \left(- y_{1} + y_{2}\right)^{2}} & \frac{y_{1} - y_{2}}{\left(- x_{1} + x_{2}\right)^{2} + \left(- y_{1} + y_{2}\right)^{2}} & - \frac{- x_{1} + x_{2}}{\left(- x_{1} + x_{2}\right)^{2} + \left(- y_{1} + y_{2}\right)^{2}} & \frac{- x_{1} + x_{2}}{\left(- x_{1} + x_{2}\right)^{2} + \left(- y_{1} + y_{2}\right)^{2}}\end{bmatrix}
+           $$
+           
+           
+            
+               
+          \item The upper bound and lower bound of errors were were defined according to Figure \ref{fig:Error Bounds} . The green arrows represent the vector in which direction the error should propagate for it to be the upper or lower bounds of the error.    
+          
+          \begin{figure}[ht!] 
+                        \centering
+                        \includegraphics[scale=0.3]{"images/error_propagation_direction.png}
+                        \caption{Error Bounds}
+                        \label{fig:Error Bounds}
+         \end{figure}
+                
+                
+            
+        \item The python code given below is used to calculate the propagated error. In order to demonstrate the propagation of error, 5 runs of the straight, left and right motions were carried out. 
+        
+        \item Note that for this example we used \textbf{only} the parallax error of measuring the laser cross with the ruler, with an estimated error of $\pm$1mm. Therefore, the upper bound the error values will be $[0.1, -0.1, -0.1, 0.1]$ (in centimeters) and the lower bound will be $[-0.1, 0.1, 0.1, -0.1]$ (in centimeters); where the variables are in the order of $[dx_1, dx_2, dy_1, dy_2]$
+            
+            
+        \begin{minted}{python}
+    import numpy as np
+    import sympy as sp
+    import os
+    import sys
     
+    ## All distances measurement are in centimeters(cm) and angles in radians 
+
+
+def error_upper_bound(lamd_jacobian, lamd_theta_eq, 
+                      coordinate_list, error_model=[0.1,-0.1,-0.1,0.1]):
+    
+    '''
+    Calculate the upper error bound
+    
+    Parameters
+    ----------------
+    lamd_jacobian  : A lamdified jacobian matrix acting like a numpy array
+    lamd_theta_eq  : A lamdified variable matrix acting like a numpy array
+    coordinate_list: The current coordinates of the robot
+    error_model    : The estimated error bounds for robot
+    
+    
+    Returns
+    ----------------
+    A numpy array of propagated upper bound error
+    
+    
+    '''
+    
+    ## The variables are in the order x1, x2, y1, y2
+    current_jacobian = lamd_jacobian(coordinate_list[0], coordinate_list[1],
+                                     coordinate_list[2], coordinate_list[3])
+    current_theta_eq = lamd_theta_eq(error_model[0], error_model[1], 
+                                     error_model[2], error_model[3])
+    
+    return np.dot(current_jacobian, current_theta_eq)
+    
+
+
+def error_lower_bound(lamd_jacobian, lamd_theta_eq, 
+                      coordinate_list, error_model=[-0.1,0.1,0.1,-0.1]):
+    '''
+    Calculate the lower error bound
+    
+    Parameters
+    ----------------
+    lamd_jacobian  : A lamdified jacobian matrix acting like a numpy array
+    lamd_theta_eq  : A lamdified variable matrix acting like a numpy array
+    coordinate_list: The current coordinates of the robot
+    error_model    : The estimated error bounds for robot
+    
+    
+    Returns
+    ----------------
+    A numpy array of propagted lower bound error
+    
+    
+    '''
+    ## The variables are in the order x1, x2, y1, y2
+    current_jacobian = lamd_jacobian(coordinate_list[0], coordinate_list[1],
+                                     coordinate_list[2], coordinate_list[3])
+    current_theta_eq = lamd_theta_eq(error_model[0], error_model[1],
+                                     error_model[2], error_model[3])
+   
+
+    return np.dot(current_jacobian, current_theta_eq)
+    
+## Create the jacobian for the matrix
+## Even if the angle theta is 90-calulated angle the error propagation is the same 
+
+## Creating the Jacobian
+
+x1,x2,y1,y2,theta = sp.symbols('x1,x2,y1,y2,theta')
+
+##Check here if it should be atan or atan2
+eq1 = sp.atan2((y2-y1),(x2-x1))
+
+theta_eq = sp.Matrix([eq1])
+measurement_eq = sp.Matrix([x1, x2, y1, y2])
+
+error_jacobian = theta_eq.jacobian(measurement_eq)
+print("The Jacobian is \n")
+display(error_jacobian)
+
+print(f"The error matrix is \n")
+display(measurement_eq)
+
+print("\n \n The error function is \n ")
+display(error_jacobian*measurement_eq)
+lamd_jacobian = sp.lambdify([x1, x2, y1, y2], error_jacobian,'numpy')
+lamd_theta_eq = sp.lambdify([x1, x2, y1, y2], measurement_eq,'numpy')
+
+##This is a test run data from 5 runs in each category(straigh,left and right)
+## This dictionary is here to easily show how the data was collected 
+## A sepearate list will be made to make this calling of data easier
+sample_test_data_1={
+    "straight": [
+        {"x1": 1.5, "y1": 48.1, "x2": 16.3, "y2": 47.4},
+        {"x1": -1.5, "y1": 46.9, "x2": 13.2, "y2": 47.3},
+        {"x1": -3.1, "y1": 45.5, "x2": 14.2, "y2": 46.4},
+        {"x1": 0.7, "y1": 45.1, "x2": 15.4, "y2": 44.7},
+        {"x1": -0.2, "y1": 45.8, "x2": 14.7, "y2": 45.9}
+    ],
+    "left": [
+        {"x1": -19.3, "y1": 24.6, "x2": -11.2, "y2": 36.8},
+        {"x1": -20.1, "y1": 26.5, "x2": -12.1, "y2": 39.0},
+        {"x1": -19.8, "y1": 26.8, "x2": -11.7, "y2": 39.2},
+        {"x1": -21.1, "y1": 24.9, "x2": -13.4, "y2": 37.5},
+        {"x1": -18.6, "y1": 25.6, "x2": -10.0, "y2": 37.6}
+    ],
+    "right": [
+        {"x1": 27.4, "y1": 37.1, "x2": 35.3, "y2": 24.5},
+        {"x1": 28.1, "y1": 36.9, "x2": 35.7, "y2": 24.1},
+        {"x1": 27.8, "y1": 39.1, "x2": 35.6, "y2": 26.4},
+        {"x1": 27.1, "y1": 38.1, "x2": 35.0, "y2": 25.6},
+        {"x1": 27.6, "y1": 39.2, "x2": 35.1, "y2": 26.7}
+    ],
+    "origin": {"x0": 0, "y0": 0, "x0_2": 14.8, "y0_2": 0}
+}
+
+def call_data(cat,index):
+    '''
+    This functions retuns the values from the dictionary of sample run data
+    Parameters
+    ------------------------
+    cat   : The category of motion eg:Left -> char
+    index : The index of run               -> int
+    
+    Returns
+    ------------------------
+    out_list: output the list of data in order [x1,x2,y1,y2] -> list
+    
+    
+    '''
+    
+    if cat=='s':
+        out_list = np.array([sample_test_data_1['straight'][index]['x1'],
+                             sample_test_data_1['straight'][index]['x2'],
+                             sample_test_data_1['straight'][index]['y1'],
+                             sample_test_data_1['straight'][index]['y2']])
+        
+    if cat=='l':
+        out_list = np.array([sample_test_data_1['left'][index]['x1'],
+                             sample_test_data_1['left'][index]['x2'],
+                             sample_test_data_1['left'][index]['y1'],
+                             sample_test_data_1['left'][index]['y2']])
+        
+    if cat=='r':
+        out_list=np.array([sample_test_data_1['right'][index]['x1'],
+                           sample_test_data_1['right'][index]['x2'],
+                           sample_test_data_1['right'][index]['y1'],
+                           sample_test_data_1['right'][index]['y2']])
+    
+    
+    return out_list
+    
+    
+    ## Use this line to manually enter for a error bound
+
+
+
+## The variables are in the order x1, x2, y1, y2
+
+
+coordinate_list = call_data('s', 0)
+error_upper_straight = error_upper_bound(lamd_jacobian,lamd_theta_eq, coordinate_list)
+error_lower_straight = error_lower_bound(lamd_jacobian, lamd_theta_eq, coordinate_list)
+
+
+coordinate_list=call_data('l',0)
+error_upper_left=error_upper_bound(lamd_jacobian,lamd_theta_eq,coordinate_list)
+error_lower_left=error_lower_bound(lamd_jacobian,lamd_theta_eq,coordinate_list)
+
+
+coordinate_list = call_data('r', 0)
+error_upper_right = error_upper_bound(lamd_jacobian,lamd_theta_eq, coordinate_list)
+error_lower_right = error_lower_bound(lamd_jacobian, lamd_theta_eq, coordinate_list)
+
+
+print(f'The error upper bound for straight motion is {error_upper_straight[0][0]} radians \n')
+print(f'The error lower bound for straight motion is {error_lower_straight[0][0]} radians \n')
+
+print(f'The error upper bound for left motion is {error_upper_left[0][0]} radians \n')
+print(f'The error lower bound for left motion is {error_lower_left[0][0]} radians \n')
+
+print(f'The error upper bound for right motion is {error_upper_right[0][0]} radians \n')
+print(f'The error lower bound for right motion is {error_lower_right[0][0]} radians \n')
+
+
+##Use this to read from text file of the positions and calculate error for each reading
+
+file_path = os.path.join(os.getcwd(),'coordinate_list.txt')
+with open(file_path) as file:
+    data = file.readlines()
+
+
+propagated_error=np.zeros((len(data),6))
+
+file_name='Propagated_Error'
+try:
+
+
+    f=open(file_path+file_name,'x') ##Open/Create a file to store data
+
+
+except :
+
+    print("\n Maps already exist in results folder \n")
+
+
+
+for position in data:
+    
+    error_upper=error_upper_bound(lamd_jacobian,lamd_theta_eq,position)
+    error_lower=error_lower_bound(lamd_jacobian,lamd_theta_eq,position)
+    propagated_error[0:3]=position
+    propagated_error[4]=error_upper
+    propagated_error[5]=error_lower
+    f.write(propagated_error+'\n')
+    
+    
+f.close()
+    
+    
+
+    
+
+        
+    
+    
+    
+    
+    \end{minted}    
+            
+            
+        \end{itemize}
     }
     
     
