@@ -221,8 +221,6 @@ def plot_log_data(log_forward,log_left,log_right):
 
    
 
-    
-
 
       
 def plot_measurement(pose_forward,pose_left,pose_right):
@@ -281,6 +279,105 @@ def plot_measurement(pose_forward,pose_left,pose_right):
     plt.show()
 
 
+
+def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,log_right):
+    
+    width=0.009
+    keys=['t1','t2','t3']
+    
+    figure1=plt.figure(figsize=(4,8))
+    ax1=figure1.add_subplot(111)
+
+
+
+    ##Forward
+
+    #Fiding the direction vectors u & v from the angles
+    u_f=-1.0*np.sin(np.deg2rad(pose_forward[0:3,2]))
+    v_f=1.0*np.cos(np.deg2rad(pose_forward[0:3,2]))
+    ax1.quiver(pose_forward[0:3,0],pose_forward[0:3,1],u_f,v_f,color='r',width=width,linewidths=0.1,label='Forward')
+
+    ax1.scatter(log_forward['t1'][:,0],log_forward['t1'][:,1],color='tab:blue',s=1,label='Trial_1-Forward')
+    ax1.scatter(log_forward['t2'][:,0],log_forward['t2'][:,1],color='tab:orange',s=1,label='Trial_2-Forward')
+    ax1.scatter(log_forward['t3'][:,0],log_forward['t3'][:,1],color='tab:green',s=1,label='Trial_3-Forward')
+    ax1.quiver(0,0,0,1,label='Start')
+    for key in keys:
+        last_pos=[log_forward[key][-1,0],log_forward[key][-1,1]]
+        last_dir=[np.cos(log_forward[key][-1,2]),np.sin(log_forward[key][-1,2])]
+        ax1.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
+
+    ax1.set(title="Measured Movements vs Log Data of Forward Motion ",xlabel="X(cm)",ylabel="Y(cm)")
+
+
+    figure2=plt.figure(figsize=(4,8))
+    ax2=figure2.add_subplot(111)
+
+
+
+    ##Left
+
+    #Fiding the direction vectors u & v from the angles
+    u_l=-1*np.sin(np.deg2rad(pose_left[0:3,2]))
+    v_l=1*np.cos(np.deg2rad(pose_left[0:3,2]))
+
+    ax2.quiver(pose_left[0:3,0],pose_left[0:3,1],u_l,v_l,color='b',width=width,linewidths=0.1,label='Left')
+    ax2.scatter(log_left['t1'][:,0],log_left['t1'][:,1],color='tab:red',s=1,label='Trial_1-left')
+    ax2.scatter(log_left['t2'][:,0],log_left['t2'][:,1],color='tab:purple',s=1,label='Trial_2-left')
+    ax2.scatter(log_left['t3'][:,0],log_left['t3'][:,1],color='tab:brown',s=1,label='Trial_3-left')
+    
+    for key in keys:
+        last_pos=[log_left[key][-1,0],log_left[key][-1,1]]
+        last_dir=[np.cos(log_left[key][-1,2]),np.sin(log_left[key][-1,2])]
+        ax2.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
+
+    ax2.quiver(0,0,0,1,label='Start')
+
+
+    ax2.set(title="Measured Movements vs Log Data of Left Motion ",xlabel="X(cm)",ylabel="Y(cm)")
+
+
+
+
+    ##Right
+    #Fiding the direction vectors u & v from the angles
+
+
+    figure3=plt.figure(figsize=(4,8))
+    ax3=figure3.add_subplot(111)
+
+    u_r=-1.0*np.sin(np.deg2rad(pose_right[0:3,2]))
+    v_r=1.0*np.cos(np.deg2rad(pose_right[0:3,2]))
+    ax3.quiver(pose_right[0:3,0],pose_right[0:3,1],u_r,v_r,color='g',width=width,linewidths=0.1,label='Right')
+    ax3.scatter(log_right['t1'][:,0],log_right['t1'][:,1],color='tab:pink',s=1,label='Trial_1-right')   
+    ax3.scatter(log_right['t2'][:,0],log_right['t2'][:,1],color='tab:gray',s=1,label='Trial_2-right')
+    ax3.scatter(log_right['t3'][:,0],log_right['t3'][:,1],color='tab:olive',s=1,label='Trial_3-right')
+    
+    for key in keys:
+        last_pos=[log_right[key][-1,0],log_right[key][-1,1]]
+        last_dir=[np.cos(log_right[key][-1,2]),np.sin(log_right[key][-1,2])]
+        ax3.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
+
+
+
+
+
+
+    ax3.quiver(0,0,0,1,label='Start')
+    ax3.set(title="Measured Movements vs Log Data of Right Motion ",xlabel="X(cm)",ylabel="Y(cm)")
+
+    
+
+
+
+
+
+
+
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+
 if __name__=='__main__':
 
 
@@ -325,6 +422,8 @@ if __name__=='__main__':
     right_t3['t3']=right_log['get_7']
 
     plot_log_data(forward_t3,left_t3,right_t3)
+
+    plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
 
   
     
