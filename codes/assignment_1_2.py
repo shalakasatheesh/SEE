@@ -33,30 +33,44 @@ def load_measurement_data():
    
     
     
-def load_log_data():
+def load_log_data(motion_type):
     '''
-    Import the log from EV3
+    Import the log from EV3 data logs 
     
     
     '''
+    if motion_type=='f':
+        directory='../data/forward_logs'
+
+    if motion_type=='l':
+        directory='../data/left_logs'
+
+    if motion_type=='r':
+        directory='../data/right_logs'
+    
+
     filename_counter=1
     forward_logs=np.asarray([])
+    forward_dic={}
 
-    for filename in os.listdir('../data/forward_logs'):
-        with open(os.path.join('../data/forward_logs', filename), 'r') as f: # open in read only mode
+    for filename in os.listdir(directory):
+        with open(os.path.join(directory,filename), 'r') as f: # open in read only mode
             current_filename='get_'+str(filename_counter)
+            
+            
+            if (filename_counter<8):
+                #np.append(forward_logs,np.genfromtxt(f,delimiter=',',skip_header=1),axis=0)
+                forward_dic[current_filename]=np.genfromtxt(f,delimiter=',',skip_header=1)
+
+
             filename_counter+=1
-            # print(current_filename)
-            # print(f)
-            if (filename_counter%2)==0:
-                # np.append(forward_logs,np.genfromtxt(f,delimiter=',',skip_header=1),axis=0)
-                # print(filename[-20:-4])
-                a=10
-            if filename_counter==3:
-                # print(filename)
-                aa=np.genfromtxt(f,delimiter=',',skip_header=1)
-                # print(aa)
-                # print(aa.shape)
+
+                
+                
+           
+
+
+    return forward_dic
 
 
 def transform_mesurement_2_pose(measurements,initial_pos=np.array([0.0,69.0,0.0,-168.0]),offset_pos=np.array([-56,-67])):
@@ -90,17 +104,7 @@ def transform_mesurement_2_pose(measurements,initial_pos=np.array([0.0,69.0,0.0,
 
 
 
-    for index,measurement in enumerate(measurements):
-
-
-        # x1=(measurement[2]+initial_pos[2])
-        # y1=(measurement[3]+initial_pos[3])
-
-        # x2=(measurement[0]-initial_pos[0])
-        # y2=(measurement[1]-initial_pos[1])
-
-        # x= ((measurement[2]-initial_pos[2])+(measurement[0]-initial_pos[0]))/2
-        # y= ((measurement[3]-initial_pos[3])+(measurement[1]-initial_pos[1]))/2
+    for index,measurement in enumerate(measurements):       
 
         ## x2,y2 are the values of front marker
         ## Bringing the measurements to the global coordinate system by accounting for offset
@@ -115,25 +119,18 @@ def transform_mesurement_2_pose(measurements,initial_pos=np.array([0.0,69.0,0.0,
         ## Bringing the measurements to the global coordinate system by accounting for offset
         
         x1=(measurement[2]+offset_pos[0])
-        y1=(measurement[3]+offset_pos[1])
-
-       
+        y1=(measurement[3]+offset_pos[1])   
 
       
         
         
         
-       # FInal postions wrt to global coordinates
+       # Final postions wrt to global coordinates
 
         x= ((x1-initial_pos[2])+(x2-initial_pos[0]))/2
         y= ((y1-initial_pos[3])+(y2-initial_pos[1]))/2
-
-    
-
-        
-
+      
        
-
         
         # np.printoptions(suppress=True)
 
@@ -153,6 +150,7 @@ def transform_mesurement_2_pose(measurements,initial_pos=np.array([0.0,69.0,0.0,
 def print_data_to_txt(file_name,data_to_file,file_path='../data/'):
 
     '''
+    Print data to txt file
 
 
     '''
@@ -171,17 +169,62 @@ def print_data_to_txt(file_name,data_to_file,file_path='../data/'):
 
         print("\n File already exist in results folder \n")
 
+def plot_log_data(log_forward,log_left,log_right):
+
+    figure2=plt.figure(figsize=(4,8))
+    ax2=figure2.add_subplot(111)
     
 
-    # with open('employee_file.csv', mode='w') as employee_file:
-    #     employee_writer = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
-    #     employee_writer.writerow(['John Smith', 'Accounting', 'November'])
-    #     employee_writer.writerow(['Erica Meyers', 'IT', 'March'])
+    ax2.scatter(log_forward['t1'][:,0],log_forward['t1'][:,1],color='tab:blue',s=1,label='Trial_1-Forward')
+    ax2.scatter(log_forward['t2'][:,0],log_forward['t2'][:,1],color='tab:orange',s=1,label='Trial_2-Forward')
+    ax2.scatter(log_forward['t3'][:,0],log_forward['t3'][:,1],color='tab:green',s=1,label='Trial_3-Forward')
 
 
+    ax2.scatter(log_left['t1'][:,0],log_left['t1'][:,1],color='tab:red',s=1,label='Trial_1-left')
+    ax2.scatter(log_left['t2'][:,0],log_left['t2'][:,1],color='tab:purple',s=1,label='Trial_2-left')
+    ax2.scatter(log_left['t3'][:,0],log_left['t3'][:,1],color='tab:brown',s=1,label='Trial_3-left')
 
-       
+
+    ax2.scatter(log_right['t1'][:,0],log_right['t1'][:,1],color='tab:pink',s=1,label='Trial_1-right')   
+    ax2.scatter(log_right['t2'][:,0],log_right['t2'][:,1],color='tab:gray',s=1,label='Trial_2-right')
+    ax2.scatter(log_right['t3'][:,0],log_right['t3'][:,1],color='tab:olive',s=1,label='Trial_3-right')
+
+    ax2.scatter(0,0,label='Start')
+
+
+    keys=['t1','t2','t3']
+
+    for key in keys:
+        last_pos=[log_forward[key][-1,0],log_forward[key][-1,1]]
+        last_dir=[np.cos(log_forward[key][-1,2]),np.sin(log_forward[key][-1,2])]
+        ax2.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
+
+    for key in keys:
+        last_pos=[log_left[key][-1,0],log_left[key][-1,1]]
+        last_dir=[np.cos(log_left[key][-1,2]),np.sin(log_left[key][-1,2])]
+        ax2.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
+
+    for key in keys:
+        last_pos=[log_right[key][-1,0],log_right[key][-1,1]]
+        last_dir=[np.cos(log_right[key][-1,2]),np.sin(log_right[key][-1,2])]
+        ax2.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
+
+    ax2.quiver(0,0,0,1)
+
+    
+    ax2.set(title="Robot Path from logged data",xlabel="X(cm)",ylabel="Y(cm)")
+    plt.legend()
+    plt.grid()
+
+
+    plt.show()
+
+   
+
+    
+
+
+      
 def plot_measurement(pose_forward,pose_left,pose_right):
     '''
     Init pos is alwasys [0,0,0]
@@ -195,7 +238,7 @@ def plot_measurement(pose_forward,pose_left,pose_right):
 
 
     
-    figure1=plt.figure(figsize=(8,4))
+    figure1=plt.figure(figsize=(4,8))
     ax1=figure1.add_subplot(111)
 
 
@@ -204,6 +247,7 @@ def plot_measurement(pose_forward,pose_left,pose_right):
    #Fiding the direction vectors u & v from the angles
     u_f=-1.0*np.sin(np.deg2rad(pose_forward[:,2]))
     v_f=1.0*np.cos(np.deg2rad(pose_forward[:,2]))
+    
 
 
     ## Left motion
@@ -222,6 +266,7 @@ def plot_measurement(pose_forward,pose_left,pose_right):
     ax1.quiver(pose_forward[:,0],pose_forward[:,1],u_f,v_f,color='r',width=width,linewidths=0.1,minshaft=1,label='Forward')
     ax1.quiver(pose_left[:,0],pose_left[:,1],u_l,v_l,color='b',width=width,linewidths=0.1,label='Left')
     ax1.quiver(pose_right[:,0],pose_right[:,1],u_r,v_r,color='g',width=width,linewidths=0.1,label='Right')
+    ax1.quiver(0,0,0,1,label='Start')
 
     x_max=np.max(pose_forward[:,0])
     x_min=np.min(pose_forward[:,0])
@@ -243,19 +288,45 @@ if __name__=='__main__':
     ##Load the measurement data
     forward_mesurements,left_mesurements,right_mesurements=load_measurement_data()
 
-    ##Load log data from EV3
-    # forward_log=load_log_data()
+   
+
+
+
 
     #Transform measurements to degrees 
     measured_pose_forwards=transform_mesurement_2_pose(forward_mesurements)
     measured_pose_left    =transform_mesurement_2_pose(left_mesurements)
     measured_pose_right   = transform_mesurement_2_pose(right_mesurements)
    
-    # print(f'left pose \n {measured_pose_left}')
-    # print(f'right pose \n {measured_pose_right}')
-    # print(f'straght pose \n {measured_pose_forwards}')
-   
+     
     plot_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right)
+
+    #Load log data from EV3
+    forward_log=load_log_data('f')
+    left_log=load_log_data('l')
+    right_log=load_log_data('r')
+    
+    ##Load first three into a new 
+    forward_t3={}
+    forward_t3['t1']=forward_log['get_1']
+    forward_t3['t2']=forward_log['get_4']
+    forward_t3['t3']=forward_log['get_5']
+
+
+    left_t3={}
+    left_t3['t1']=left_log['get_2']
+    left_t3['t2']=left_log['get_3']
+    left_t3['t3']=left_log['get_4']
+
+
+    right_t3={}
+    right_t3['t1']=right_log['get_1']
+    right_t3['t2']=right_log['get_2']
+    right_t3['t3']=right_log['get_7']
+
+    plot_log_data(forward_t3,left_t3,right_t3)
+
+  
     
 
 
@@ -269,9 +340,9 @@ if __name__=='__main__':
     ## Print to files
     ##############################
 
-    print_data_to_txt('measured_forward_movement',measured_pose_forwards)
-    print_data_to_txt('measured_left_movement',measured_pose_left)
-    print_data_to_txt('measured_right_movement',measured_pose_right)
+    # print_data_to_txt('measured_forward_movement',measured_pose_forwards)
+    # print_data_to_txt('measured_left_movement',measured_pose_left)
+    # print_data_to_txt('measured_right_movement',measured_pose_right)
 
 
     
