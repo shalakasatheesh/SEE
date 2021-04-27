@@ -171,7 +171,7 @@ def print_data_to_txt(file_name,data_to_file,file_path='../data/'):
 
 def plot_log_data(log_forward,log_left,log_right):
 
-    figure2=plt.figure(figsize=(4,8))
+    figure2=plt.figure(figsize=(6,12))
     ax2=figure2.add_subplot(111)
     
 
@@ -284,7 +284,7 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     keys=['t1','t2','t3']
 
 
-    figure1=plt.figure(figsize=(4,8))
+    figure1=plt.figure(figsize=(6,12))
     ax1=figure1.add_subplot(111)
 
 
@@ -293,8 +293,8 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     v_f=1.0*np.cos(np.deg2rad(pose_forward[0:3,2]))
 
     ax1.quiver(pose_forward[0,0],pose_forward[0,1],u_f[0],v_f[0],color='b',width=width,linewidths=0.1,label='Trial 1 Measurements ')
-    ax1.quiver(pose_forward[1,0],pose_forward[1,1],u_f[1],v_f[1],color='b',width=width,linewidths=0.1,label='Trial 2 Measurements ')
-    ax1.quiver(pose_forward[2,0],pose_left[2,1],u_f[2],v_f[2],color='b',width=width,linewidths=0.1,label='Trial 3 Measurements ')
+    ax1.quiver(pose_forward[1,0],pose_forward[1,1],u_f[1],v_f[1],color='g',width=width,linewidths=0.1,label='Trial 2 Measurements ')
+    ax1.quiver(pose_forward[2,0],pose_forward[2,1],u_f[2],v_f[2],color='r',width=width,linewidths=0.1,label='Trial 3 Measurements ')
     ax1.scatter(log_forward['t1'][:,0],log_forward['t1'][:,1],color='tab:blue',s=1,label='Trial 1 Logged')
     ax1.scatter(log_forward['t2'][:,0],log_forward['t2'][:,1],color='tab:orange',s=1,label='Trial 2 Logged')
     ax1.scatter(log_forward['t3'][:,0],log_forward['t3'][:,1],color='tab:green',s=1,label='Trial 3 Logged')
@@ -307,7 +307,7 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     ax1.set(title="Measured Movements vs Log Data of Forward Motion ",xlabel="X(cm)",ylabel="Y(cm)")
 
 
-    figure2=plt.figure(figsize=(4,8))
+    figure2=plt.figure(figsize=(6,12))
     ax2=figure2.add_subplot(111)
 
    
@@ -322,8 +322,8 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     v_l=1*np.cos(np.deg2rad(pose_left[0:3,2]))
 
     ax2.quiver(pose_left[0,0],pose_left[0,1],u_l[0],v_l[0],color='b',width=width,linewidths=0.1,label='Trial 1 Measurements ')
-    ax2.quiver(pose_left[1,0],pose_left[1,1],u_l[1],v_l[1],color='b',width=width,linewidths=0.1,label='Trial 2 Measurements ')
-    ax2.quiver(pose_left[2,0],pose_left[2,1],u_l[2],v_l[2],color='b',width=width,linewidths=0.1,label='Trial 3 Measurements ')
+    ax2.quiver(pose_left[1,0],pose_left[1,1],u_l[1],v_l[1],color='g',width=width,linewidths=0.1,label='Trial 2 Measurements ')
+    ax2.quiver(pose_left[2,0],pose_left[2,1],u_l[2],v_l[2],color='r',width=width,linewidths=0.1,label='Trial 3 Measurements ')
     ax2.scatter(log_left['t1'][:,0],log_left['t1'][:,1],color='tab:red',s=1,label='Trial 1 logged')
     ax2.scatter(log_left['t2'][:,0],log_left['t2'][:,1],color='tab:purple',s=1,label='Trial 2 logged')
     ax2.scatter(log_left['t3'][:,0],log_left['t3'][:,1],color='tab:brown',s=1,label='Trial 3 logged')
@@ -347,28 +347,30 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     #Fiding the direction vectors u & v from the angles
 
 
-    # figure3=plt.figure(figsize=(4,8))
-    # ax3=figure3.add_subplot(111)
+    figure3=plt.figure(figsize=(6,12))
+    ax3=figure3.add_subplot(111)
 
-    # u_r=-1.0*np.sin(np.deg2rad(pose_right[0:3,2]))
-    # v_r=1.0*np.cos(np.deg2rad(pose_right[0:3,2]))
-    # ax3.quiver(pose_right[0:3,0],pose_right[0:3,1],u_r,v_r,color='g',width=width,linewidths=0.1,label='Mesurements')
-    # ax3.scatter(log_right['t1'][:,0],log_right['t1'][:,1],color='tab:pink',s=1,label='Trial 1 logged')   
-    # ax3.scatter(log_right['t2'][:,0],log_right['t2'][:,1],color='tab:gray',s=1,label='Trial 2 logged')
-    # ax3.scatter(log_right['t3'][:,0],log_right['t3'][:,1],color='tab:olive',s=1,label='Trial 3 logged')
+    u_r=-1.0*np.sin(np.deg2rad(pose_right[0:3,2]))
+    v_r=1.0*np.cos(np.deg2rad(pose_right[0:3,2]))
+    ax3.quiver(pose_right[0,0],pose_right[0,1],u_r[0],v_r[0],color='b',width=width,linewidths=0.1,label='Trial 1 Measurements ')
+    ax3.quiver(pose_right[1,0],pose_right[1,1],u_r[1],v_r[1],color='g',width=width,linewidths=0.1,label='Trial 2 Measurements ')
+    ax3.quiver(pose_right[2,0],pose_right[2,1],u_r[2],v_r[2],color='r',width=width,linewidths=0.1,label='Trial 3 Measurements ')
+    ax3.scatter(log_right['t1'][:,0],log_right['t1'][:,1],color='tab:pink',s=1,label='Trial 1 logged')   
+    ax3.scatter(log_right['t2'][:,0],log_right['t2'][:,1],color='tab:gray',s=1,label='Trial 2 logged')
+    ax3.scatter(log_right['t3'][:,0],log_right['t3'][:,1],color='tab:olive',s=1,label='Trial 3 logged')
 
-    # for key in keys:
-    #     last_pos=[log_right[key][-1,0],log_right[key][-1,1]]
-    #     last_dir=[np.cos(log_right[key][-1,2]),np.sin(log_right[key][-1,2])]
-    #     ax3.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
-
-
-
-
+    for key in keys:
+        last_pos=[log_right[key][-1,0],log_right[key][-1,1]]
+        last_dir=[np.cos(log_right[key][-1,2]),np.sin(log_right[key][-1,2])]
+        ax3.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
 
 
-    # ax3.quiver(0,0,0,1,label='Start')
-    # ax3.set(title="Measured Movements vs Log Data of Right Motion ",xlabel="X(cm)",ylabel="Y(cm)")
+
+
+
+
+    ax3.quiver(0,0,0,1,label='Start')
+    ax3.set(title="Measured Movements vs Log Data of Right Motion ",xlabel="X(cm)",ylabel="Y(cm)")
 
     
 
