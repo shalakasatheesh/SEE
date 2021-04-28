@@ -24,20 +24,22 @@ def load_all_measurement_data():
     right_measurements2=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_2_reading/Right.csv',delimiter=',',skip_header=1)
 
     forward_measurements3=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_3_reading/straight_end_poses.csv',delimiter=',',skip_header=1)
+    forward_measurements3=forward_measurements3[:,1:]
     left_measurements3=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_3_reading/left_end_poses.csv',delimiter=',',skip_header=1)
+    left_measurements3=left_measurements3[:,1:]
     right_measurements3=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_3_reading/right_end_poses.csv',delimiter=',',skip_header=1)
+    right_measurements3=right_measurements3[:,1:]
 
-    # forward_measurements4=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_4_reading/front_measurement.csv',delimiter=',',skip_header=1)
-    # left_measurements4=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_4_reading/left_measurement.csv',delimiter=',',skip_header=1)
-    # right_measurements4=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_4_reading/right_measurement.csv',delimiter=',',skip_header=1)
+    all_measurements5=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_5_reading/lego_table_template.csv',delimiter=',',skip_header=1)
+    forward_mesurements5=all_measurements5[1:22,5:8]
+    left_measurements5=all_measurements5[1:22,1:4]
+    right_measurements5=all_measurements5[1:22,9:14]
+    
    
-    forward_measurements4=np.array([[0,0,0],[0,0,0]])
-    left_measurements4=np.array([[0,0,0],[0,0,0]])
-    right_measurements4=np.array([[0,0,0],[0,0,0]])
 
 
 
-    return forward_measurements1,left_measurements1,right_measurements1,forward_measurements2,left_measurements2,right_measurements2,forward_measurements3,left_measurements3,right_measurements3,forward_measurements4,left_measurements4,right_measurements4
+    return forward_measurements1,left_measurements1,right_measurements1,forward_measurements2,left_measurements2,right_measurements2,forward_measurements3,left_measurements3,right_measurements3,forward_mesurements5,left_measurements5,right_measurements5
     
 
 
@@ -251,7 +253,7 @@ def plot_log_data(log_forward,log_left,log_right):
 
    
 
-def plot_all_measurements(pose_forward,pose_left,pose_right,pose_forward1,pose_left1,pose_right1,pose_forward2,pose_left2,pose_right2,pose_forward3,pose_left3,pose_right3,pose_forward4,pose_left4,pose_right4):
+def plot_all_measurements(pose_forward,pose_left,pose_right,pose_forward1,pose_left1,pose_right1,pose_forward2,pose_left2,pose_right2,pose_forward3,pose_left3,pose_right3,pose_forward5,pose_left5,pose_right5):
     
     '''
     Init pos is alwasys [0,0,0]
@@ -275,17 +277,17 @@ def plot_all_measurements(pose_forward,pose_left,pose_right,pose_forward1,pose_l
     u_f=-1.0*np.sin(np.deg2rad(pose_forward[:,2]))
     v_f=1.0*np.cos(np.deg2rad(pose_forward[:,2]))
 
-    u_f1=-1.0*np.sin((pose_forward1[:,2]))
-    v_f1=1.0*np.cos((pose_forward1[:,2]))
+    u_f1=1.0*np.sin(np.deg2rad(-pose_forward1[:,2]))
+    v_f1=1.0*np.cos(np.deg2rad(-pose_forward1[:,2]))
 
     u_f2=-1.0*np.sin(np.deg2rad(pose_forward2[:,2]))
     v_f2=1.0*np.cos(np.deg2rad(pose_forward2[:,2]))
 
-    u_f3=-1.0*np.sin((pose_forward3[:,2]))
-    v_f3=1.0*np.cos((pose_forward3[:,2]))
+    u_f3=-1.0*np.sin(np.deg2rad(-pose_forward3[:,2]))
+    v_f3=1.0*np.cos(np.deg2rad(-pose_forward3[:,2]))
 
-    u_f4=-1.0*np.sin(np.deg2rad(pose_forward4[:,2]))
-    v_f4=1.0*np.cos(np.deg2rad(pose_forward4[:,2]))
+    u_f5=1.0*np.cos(np.deg2rad(pose_forward5[:,2]))
+    v_f5=1.0*np.sin(np.deg2rad(pose_forward5[:,2]))
     
 
 
@@ -295,17 +297,18 @@ def plot_all_measurements(pose_forward,pose_left,pose_right,pose_forward1,pose_l
     u_l=-1*np.sin(np.deg2rad(pose_left[:,2]))
     v_l=1*np.cos(np.deg2rad(pose_left[:,2]))
 
-    u_l1=-1*np.sin((pose_left1[:,2]))
-    v_l1=1*np.cos((pose_left1[:,2]))
+    u_l1=1*np.sin(np.deg2rad(-pose_left1[:,2]))
+    v_l1=1*np.cos(np.deg2rad(-pose_left1[:,2]))
 
-    u_l2=-1*np.sin(np.deg2rad(pose_left1[:,2]))
-    v_l2=1*np.cos(np.deg2rad(pose_left1[:,2]))
+    u_l2=-1*np.sin(np.deg2rad(pose_left2[:,2]))
+    v_l2=1*np.cos(np.deg2rad(pose_left2[:,2]))
 
-    u_l3=-1*np.sin((pose_left1[:,2]))
-    v_l3=1*np.cos((pose_left1[:,2]))
+    u_l3=-1*np.sin(np.deg2rad(-pose_left3[:,2]))
+    v_l3=1*np.cos(np.deg2rad(-pose_left3[:,2]))
+    
 
-    u_l4=-1*np.sin(np.deg2rad(pose_left1[:,2]))
-    v_l4=1*np.cos(np.deg2rad(pose_left1[:,2]))
+    u_l5=1*np.sin(np.deg2rad(pose_left5[:,2]))
+    v_l5=1*np.cos(np.deg2rad(pose_left5[:,2]))
 
 
 
@@ -316,29 +319,39 @@ def plot_all_measurements(pose_forward,pose_left,pose_right,pose_forward1,pose_l
     u_r=-1.0*np.sin(np.deg2rad(pose_right[:,2]))
     v_r=1.0*np.cos(np.deg2rad(pose_right[:,2]))
 
-    u_r1=-1.0*np.sin((pose_right1[:,2]))
-    v_r1=1.0*np.cos((pose_right1[:,2]))
+    u_r1=1.0*np.sin(np.deg2rad(-pose_right1[:,2]))
+    v_r1=1.0*np.cos(np.deg2rad(-pose_right1[:,2]))
 
     u_r2=-1.0*np.sin(np.deg2rad(pose_right2[:,2]))
     v_r2=1.0*np.cos(np.deg2rad(pose_right2[:,2]))
 
-    u_r3=-1.0*np.sin((pose_right3[:,2]))
-    v_r3=1.0*np.cos((pose_right3[:,2]))
+    u_r3=-1.0*np.sin(np.deg2rad(-pose_right3[:,2]))
+    v_r3=1.0*np.cos(np.deg2rad(-pose_right3[:,2]))
+
+    u_r5=-1.0*np.sin(np.deg2rad(-pose_right5[:,2]))
+    v_r5=1.0*np.cos(np.deg2rad(-pose_right5[:,2]))
 
 
 
     ##Plotting
     
-    ax1.quiver(pose_forward[:,0],pose_forward[:,1],u_f,v_f,color='r',width=width,linewidths=0.1,minshaft=1,label='Forward Group 4(ours)')
-    ax1.quiver(pose_forward1[:,0],pose_forward1[:,1],u_f1,v_f1,color='b',width=width,linewidths=0.1,minshaft=1,label='Forward Group1')
+    ## Forward
+    ax1.quiver(pose_forward[:,0],pose_forward[:,1],u_f,v_f,color='b',width=width,linewidths=0.1,minshaft=1,label='Forward Group 4(ours)')
+    ax1.quiver(pose_forward1[:,0],pose_forward1[:,1],u_f1,v_f1,color='r',width=width,linewidths=0.1,minshaft=1,label='Forward Group 1')
+    ax1.quiver(pose_forward3[:,0],pose_forward3[:,1],u_f3,v_f3,color='g',width=width,linewidths=0.1,minshaft=1,label='Forward Group 3')
+    ax1.quiver(pose_forward5[:,0],pose_forward5[:,1],u_f5,v_f5,color='tab:orange',width=width,linewidths=0.1,minshaft=1,label='Forward Group 5')
 
-
+    ## Left
     ax1.quiver(pose_left[:,0],pose_left[:,1],u_l,v_l,color='b',width=width,linewidths=0.1,label='Left Group 4(Ours)')
-    ax1.quiver(pose_left1[:,0],pose_left1[:,1],u_l1,v_l1,color='b',width=width,linewidths=0.1,label='Left Group 1')
+    ax1.quiver(pose_left1[:,0],pose_left1[:,1],u_l1,v_l1,color='r',width=width,linewidths=0.1,label='Left Group 1')
+    ax1.quiver(pose_left3[:,0],pose_left3[:,1],u_l3,v_l3,color='g',width=width,linewidths=0.1,label='Left Group 3')
+    ax1.quiver(pose_left5[:,0],pose_left5[:,1],u_l5,v_l5,color='tab:orange',width=width,linewidths=0.1,label='Left Group 5')
 
-
-    ax1.quiver(pose_right[:,0],pose_right[:,1],u_r,v_r,color='g',width=width,linewidths=0.1,label='Right Group 4(Ours)')
-    ax1.quiver(pose_right1[:,0],pose_right1[:,1],u_r1,v_r1,color='g',width=width,linewidths=0.1,label='Right Group 1')
+    ## Right
+    ax1.quiver(pose_right[:,0],pose_right[:,1],u_r,v_r,color='b',width=width,linewidths=0.1,label='Right Group 4(Ours)')
+    ax1.quiver(pose_right1[:,0],pose_right1[:,1],u_r1,v_r1,color='r',width=width,linewidths=0.1,label='Right Group 1')
+    ax1.quiver(pose_right3[:,0],pose_right3[:,1],u_r3,v_r3,color='g',width=width,linewidths=0.1,label='Right Group 3')
+    ax1.quiver(pose_right5[:,0],pose_right5[:,1],u_r5,v_r5,color='tab:orange',width=width,linewidths=0.1,label='Right Group 5')
 
 
 
@@ -357,6 +370,12 @@ def plot_all_measurements(pose_forward,pose_left,pose_right,pose_forward1,pose_l
     plt.grid()
     plt.show()
       
+
+
+#########################
+# Plot the measurements of our own 
+# 
+# ####################      
 def plot_measurement(pose_forward,pose_left,pose_right):
     '''
     Init pos is alwasys [0,0,0]
@@ -562,23 +581,23 @@ if __name__=='__main__':
     right_t3['t2']=right_log['get_2']
     right_t3['t3']=right_log['get_7']
 
-    # plot_log_data(forward_t3,left_t3,right_t3)
-
-    # plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
+   
+    plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
 
   
     forward_mesurements1,left_mesurements1,right_mesurements1,\
     forward_mesurements2,left_mesurements2,right_mesurements2,\
         forward_mesurements3,left_mesurements3,right_mesurements3,\
-            forward_mesurements4,left_mesurements4,right_mesurements4\
+            forward_mesurements5,left_mesurements5,right_mesurements5\
     =load_all_measurement_data()
 
+    
 
 
     plot_all_measurements(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_mesurements1,left_mesurements1,right_mesurements1,\
         forward_mesurements2,left_mesurements2,right_mesurements2,\
             forward_mesurements3,left_mesurements3,right_mesurements3,\
-                forward_mesurements4,left_mesurements4,right_mesurements4)
+                forward_mesurements5,left_mesurements5,right_mesurements5)
 
 
   
@@ -601,4 +620,4 @@ if __name__=='__main__':
 
 
     
-    # load_log_data()
+  
