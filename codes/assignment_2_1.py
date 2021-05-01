@@ -10,6 +10,8 @@ import scipy as sci
 def transform_mesurement_2_pose(measurements,initial_pos=np.array([0.0,69.0,0.0,-168.0]),offset_pos=np.array([-56,-67])):
     '''
     Transform the raw measurement data to the global coordinate sytem
+
+    This function is specific to group 4 data
     
     The measurement data was stored in the format given below
     [x_front,y_front,x_rear,y_rear]==[x2,y2,x1,y1]
