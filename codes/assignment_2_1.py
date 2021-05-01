@@ -3,7 +3,8 @@
 
 
 import numpy as np
-import scipy as sci
+from scipy.stats import norm
+import matplotlib.pyplot as plt
 
 
 
@@ -183,7 +184,7 @@ def load_data():
     right_measurements_all=np.concatenate((right_measurements1,right_measurements3,right_measurements5,right_measurements6),axis=0)
 
 
-    print(len(forward_measurements1))
+   
 
     
     group_4_data=np.hstack((forward_measurements4,left_measurements4,right_measurements4))
@@ -239,5 +240,49 @@ def remove_outliers(data, pp1, pp2):
     return final_data
     
 
+def gaussian_fit(data):
+    '''
+    Take in a data set and fit to gaussian
+
+
+    Parameters
+    ----------
+    data : has the form [[forward],[left],[right]]
+    
+
+    
+    '''
+
+
+    n_bins=30
+
+    forward=data[:,0:3]
+    forward_x_mean=np.mean(forward[:,0])
+    forward_x_std=np.std(forward[:,0])
+   
+
+   
+    forward_y_mean=norm.mean(forward[:,1])
+    forward_y_std=norm.std(forward[:,1])
+
+    x_range=np.linspace(np.min(forward[:,0]),np.max(forward[:,0]),1000)
+   
+
+
+    figure2=plt.figure(figsize=(15,9))  
+    ax2=figure2.add_subplot(111)
+    ax2.plot(x_range,norm.pdf(x_range,forward_x_mean,forward_x_std),label='Gaussian')
+    ax2.hist(forward[:,0], bins=n_bins,density=True,ec='black',label='Histogram')
+    ax2.set(title="Gaussian Probability along histogram",xlabel='Data',ylabel='P(x)')
+    ax2.legend()
+    ax2.grid()
+    plt.show()
+
+    
+
+
+
+
 if __name__=='__main__':
     group_4_data,group_all_data=load_data()
+    gaussian_fit(group_4_data)
