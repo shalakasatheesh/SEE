@@ -253,37 +253,65 @@ def gaussian_fit(data):
     
     '''
 
-
     
+    for motion_index in [[0,3],[3,6],[6,9]]:
+        current_data=data[:,motion_index[0]:motion_index[1]]
+        x_mean=np.mean(current_data[:,0])
+        x_std =np.std(current_data[:,0])
+        ## Freedman–Diaconis rule for calculating number of bins in a histogram
+        ## https://en.wikipedia.org/wiki/Freedman%E2%80%93Diaconis_rule
+        x_n_bins=int(round((np.max(current_data[:,0])-np.min(current_data[:,0]))/(2*iqr(current_data[:,0])*len(current_data)**(-1/3))))
+        x_range=np.arange(np.min(current_data[:,0]),np.max(current_data[:,0]),0.1)
+            
 
-    forward=data[:,0:3]
-    forward_x_mean=np.mean(forward[:,0])
-    forward_x_std=np.std(forward[:,0])
 
-    
-    ## Freedman–Diaconis rule for calculating number of bins in a histogram
-    ## https://en.wikipedia.org/wiki/Freedman%E2%80%93Diaconis_rule
-    n_bins=int(round((np.max(forward[:,0])-np.min(forward[:,0]))/(2*iqr(forward[:,0])*len(forward)**(-1/3))))
-  
+
+
+        y_mean=np.mean(current_data[:,1])
+        y_std =np.std(current_data[:,1])
+        y_n_bins=int(round((np.max(current_data[:,1])-np.min(current_data[:,1]))/(2*iqr(current_data[:,1])*len(current_data)**(-1/3))))
+        y_range=np.arange(np.min(current_data[:,1]),np.max(current_data[:,1]),0.1)
+
+
+        if motion_index[0]==0:
+            plot_title_x="Forward data for x"
+            plot_title_y="Forward data for y"
+
+        if motion_index[0]==3:
+            plot_title_x="Forward data for x"
+            plot_title_y="Forward data for y"
+
+        if motion_index[0]==6:
+            plot_title_x="Forward data for x"
+            plot_title_y="Forward data for y"
+
+        plt.figure()
+        plt.plot(x_range,norm.pdf(x_range,x_mean,x_std),label='Gaussian')
+        plt.hist(current_data[:,0],bins=x_n_bins,ec='black',density=True,label='Histogram')
+        plt.title(plot_title_x)
+        plt.xlabel('Data')
+        plt.ylabel('P(x)')
+        plt.legend()
+        plt.grid()
+
+
+        plt.figure()
+
+        
+        plt.plot(y_range,norm.pdf(y_range,y_mean,y_std),label='Gaussian')
+        plt.hist(current_data[:,1],bins=y_n_bins,ec='black',density=True,label='Histogram')
+        plt.title(plot_title_y)
+        plt.xlabel('Data')
+        plt.ylabel('P(y)')
+        plt.legend()
+        plt.grid()
+
+
+
+
+        plt.show()
+
    
-
-   
-    forward_y_mean=norm.mean(forward[:,1])
-    forward_y_std=norm.std(forward[:,1])
-
-    x_range=np.arange(np.min(forward[:,0]),np.max(forward[:,0]),0.1)
-   
-    
-
-
-    figure2=plt.figure(figsize=(15,9))  
-    ax2=figure2.add_subplot(111)
-    ax2.plot(x_range,norm.pdf(x_range,forward_x_mean,forward_x_std**2),label='Gaussian')
-    ax2.hist(forward[:,0],bins=n_bins,ec='black',density=True,label='Histogram')
-    ax2.set(title="Gaussian Probability along histogram",xlabel='Data',ylabel='P(x)')
-    ax2.legend()
-    ax2.grid()
-    plt.show()
 
     
 
