@@ -3,7 +3,7 @@
 
 
 import numpy as np
-from scipy.stats import norm
+from scipy.stats import norm,iqr
 import matplotlib.pyplot as plt
 
 
@@ -254,25 +254,32 @@ def gaussian_fit(data):
     '''
 
 
-    n_bins=30
+    
 
     forward=data[:,0:3]
     forward_x_mean=np.mean(forward[:,0])
     forward_x_std=np.std(forward[:,0])
+
+    
+    ## Freedman–Diaconis rule for calculating number of bins in a histogram
+    ## https://en.wikipedia.org/wiki/Freedman%E2%80%93Diaconis_rule
+    n_bins=int(round((np.max(forward[:,0])-np.min(forward[:,0]))/(2*iqr(forward[:,0])*len(forward)**(-1/3))))
+  
    
 
    
     forward_y_mean=norm.mean(forward[:,1])
     forward_y_std=norm.std(forward[:,1])
 
-    x_range=np.linspace(np.min(forward[:,0]),np.max(forward[:,0]),1000)
+    x_range=np.arange(np.min(forward[:,0]),np.max(forward[:,0]),0.1)
    
+    
 
 
     figure2=plt.figure(figsize=(15,9))  
     ax2=figure2.add_subplot(111)
-    ax2.plot(x_range,norm.pdf(x_range,forward_x_mean,forward_x_std),label='Gaussian')
-    ax2.hist(forward[:,0], bins=n_bins,density=True,ec='black',label='Histogram')
+    ax2.plot(x_range,norm.pdf(x_range,forward_x_mean,forward_x_std**2),label='Gaussian')
+    ax2.hist(forward[:,0],bins=n_bins,ec='black',density=True,label='Histogram')
     ax2.set(title="Gaussian Probability along histogram",xlabel='Data',ylabel='P(x)')
     ax2.legend()
     ax2.grid()
@@ -285,4 +292,4 @@ def gaussian_fit(data):
 
 if __name__=='__main__':
     group_4_data,group_all_data=load_data()
-    gaussian_fit(group_4_data)
+    gaussian_fit(group_all_data)
