@@ -239,8 +239,25 @@ def remove_outliers(data, pp1, pp2):
 
     return final_data
     
+def gaussian_ellipsis(data): 
+    '''
+    Print the confidence ellipsis of the data we collected
 
-def gaussian_fit(data):
+    Reference
+    https://matplotlib.org/devdocs/gallery/statistics/confidence_ellipse.html
+
+    Parameters
+    -----------
+    data : The data measurements ->np.array
+    '''
+
+
+    ##
+    print()
+
+
+
+def gaussian_distribution(data):
     '''
     Take in a data set and fit to gaussian
 
@@ -253,7 +270,7 @@ def gaussian_fit(data):
     
     '''
 
-    
+    ## Looping through the indexes of forward,left and right motions
     for motion_index in [[0,3],[3,6],[6,9]]:
         current_data=data[:,motion_index[0]:motion_index[1]]
         x_mean=np.mean(current_data[:,0])
@@ -278,12 +295,12 @@ def gaussian_fit(data):
             plot_title_y="Forward data for y"
 
         if motion_index[0]==3:
-            plot_title_x="Forward data for x"
-            plot_title_y="Forward data for y"
+            plot_title_x="Left data for x"
+            plot_title_y="Left data for y"
 
         if motion_index[0]==6:
-            plot_title_x="Forward data for x"
-            plot_title_y="Forward data for y"
+            plot_title_x="Right data for x"
+            plot_title_y="Right data for y"
 
         plt.figure()
         plt.plot(x_range,norm.pdf(x_range,x_mean,x_std),label='Gaussian')
@@ -320,4 +337,4 @@ def gaussian_fit(data):
 
 if __name__=='__main__':
     group_4_data,group_all_data=load_data()
-    gaussian_fit(group_all_data)
+    gaussian_distribution(group_all_data)
