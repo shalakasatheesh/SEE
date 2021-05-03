@@ -5,7 +5,8 @@
 import numpy as np
 from scipy.stats import norm,iqr
 import matplotlib.pyplot as plt
-
+from matplotlib.patches import Ellipse
+import matplotlib.transforms as transforms
 
 
 def transform_mesurement_2_pose(measurements,initial_pos=np.array([0.0,69.0,0.0,-168.0]),offset_pos=np.array([-56,-67])):
@@ -245,15 +246,24 @@ def gaussian_ellipsis(data):
 
     Reference
     https://matplotlib.org/devdocs/gallery/statistics/confidence_ellipse.html
-
+    http://www.cs.utah.edu/~tch/CS6640F2020/resources/How%20to%20draw%20a%20covariance%20error%20ellipse.pdf
     Parameters
     -----------
     data : The data measurements ->np.array
     '''
 
+    ##Looping through the indexes of all three motions
+    for motion_index in [[0,3],[3,6],[6,9]]:
+        
+        current_motion=data[:,motion_index[0]:motion_index[1]]
+        x=current_motion[:,0]
+        y=current_motion[:,1]
 
-    ##
-    print()
+        cov=np.cov(x,y)
+
+        
+
+
 
 
 
