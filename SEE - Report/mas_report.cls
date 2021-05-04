@@ -68,6 +68,7 @@
 \usepackage{lmodern}%
 \usepackage{minted} %Make the python look pretty
 \usepackage{xcolor}
+\usepackage{multirow} %Make use of muti column tables
 \onehalfspacing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Definitions

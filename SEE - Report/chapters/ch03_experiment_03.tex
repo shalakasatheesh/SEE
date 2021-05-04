@@ -1,0 +1,55 @@
+\begin{document}
+    \chapter{Task 2}
+    \section{Deliverables 2}
+    \begin{itemize}
+        \item[] Update your previous week’s report and add a description of the test for a match with a Gaussian distribution. As well as a description of the observed differences between the observed and the computed motion and the actual and expected accuracy and precision. Include appropriate figures, diagrams, and images backing up any claims you make. The report must be self-contained and provide enough details to support any statement you make. If applicable, include a section on problems encountered. Your update should cover:
+    \end{itemize}
+    
+    \begin{itemize}
+        \item[1.] Any possible pre-processing of your data, like outlier detection and removal.
+        \item[2.] Fit of a Gaussian, either two individual ones in the x and y directions for each of the three cases or a proper two-dimensional distribution per case.
+        \item[3.] Check whether the data are actually distributed according to a Gaussian distribution.
+        \item[4.] List of used software, including source of any function you wrote for performing your analysis.
+        \item[5.] An answer to the following question: When analysing the data with respect to the executed motions, which characteristic of the data do you establish here: the accuracy, the precision, or both?
+        \item[6.] For presenting some of the statistical parameters that characterize the observed robot behaviour, in your report, as an example, you can use the structure defined by table 4 (section A.2).
+    \end{itemize}
+    
+    \section{Comparison of encoder data with manual measurements}
+    
+    \section{Remove outliers}
+    
+    \begin{table}[]
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Motion}          & \textbf{Random Variable} & \textbf{Original data points} & \textbf{Outlier count} \\ \hline
+    \multirow{3}{*}{Forward} & X(cm)                    & 101                           & 7                      \\ \cline{2-4} 
+                             & Y(cm)                    & 101                           & 4                      \\ \cline{2-4} 
+                             & Orientation (degrees)           & 101                           & 7                      \\ \hline
+    \multirow{3}{*}{Left}    & X(cm)                    & 101                           & 7                      \\ \cline{2-4} 
+                             & Y(cm)                    & 101                           & 4                      \\ \cline{2-4} 
+                             & Orientation (degrees)           & 101                           & 6                      \\ \hline
+    \multirow{3}{*}{Right}   & X(cm)                    & 101                           & 4                      \\ \cline{2-4} 
+                             & Y(cm)                    & 101                           & 4                      \\ \cline{2-4} 
+                             & Orientation (degrees)           & 101                           & 10                     \\ \hline
+    \caption{{Outliers detected in measured data}}
+    \label{tab: right-run}
+    \end{tabular}
+    \end{table}
+    
+    \section{Fit a Gaussian - is the data truly Gaussian distributed}
+    
+    \section{PCA \& uncertainty ellipses}
+     
+    \section{Comparison of uncertainty in measurement process and statistical uncertainty}
+     
+    
+
+    
+   
+
+        
+     
+
+   
+    
+\end{document}
