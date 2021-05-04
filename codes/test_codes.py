@@ -1,12 +1,11 @@
-clear all;
-close all;
-
-% Create some random data
-s = [2 2];
-x = randn(334,1);
-y1 = normrnd(s(1).*x,1);
-y2 = normrnd(s(2).*x,1);
-data = [y1 y2];
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Create some random data
+s = [2,2]
+x = randn(334,1)
+y1 = normrnd(s(1).*x,1)
+y2 = normrnd(s(2).*x,1)
+data = [y1 , y2]
 
 % Calculate the eigenvectors and eigenvalues
 covariance = cov(data);
@@ -79,3 +78,10 @@ hold on;
 % Set the axis labels
 hXLabel = xlabel('x');
 hYLabel = ylabel('y');
+
+
+
+
+####################################
+
+#############################

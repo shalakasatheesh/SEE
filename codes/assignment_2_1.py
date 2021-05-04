@@ -208,6 +208,9 @@ def remove_outliers(data, pp1, pp2):
 
         Based on the lecture slide of SEE at HBRS
 
+        Reference:
+        https://kyrcha.info/2019/11/26/data-outlier-detection-using-the-chebyshev-theorem-paper-review-and-online-adaptation
+
 
         Parameters
         -----------
@@ -217,28 +220,151 @@ def remove_outliers(data, pp1, pp2):
 
         Returns
         -----------
-        final_data: Data with outliers removed
+        filtered_data: Data with outliers removed
     '''
 
-    mu1 = np.mean(data)
-    sigma1 = np.std(data)
-    k = 1./ np.sqrt(pp1)
-    odv1u = mu1 + k * sigma1
-    odv1l = mu1 - k * sigma1
+    ## Create an list to store new filered data
+    filtered_data_forward=np.array([])
+    filtered_data_left=np.array([])
+    filtered_data_right=np.array([])
+
+    
+    ## Loop between all three motion types
+    for motion_index in [[0,3],[3,6],[6,9]]:
+        
+        current_motion=data[:,motion_index[0]:motion_index[1]]
+        
+    
 
 
-    new_data = data[np.where(data <= odv1u)[0]]
-    new_data = new_data[np.where(new_data >= odv1l)[0]]
-    mu2 = np.mean(new_data)
-    sigma2 = np.std(new_data)
-    k = 1./ np.sqrt(pp2)
-    odv2u = mu2 + k * sigma2
-    odv2l = mu2 - k * sigma2
-    final_data = new_data[np.where(new_data <= odv2u)[0]]
-    final_data = new_data[np.where(final_data >= odv2l)[0]]
+        ##Loop between x and y
+        
+        for index in [0,1]:
+            current_direction=current_motion[:,index]
+            
+            ##Mean and standard deviation of data
+            mu1 = np.mean(current_direction)
+            sigma1 = np.std(current_direction)
+
+            ## k is the no of standard deviations
+            k = 1./ np.sqrt(pp1)
+            ## Outlier detection value upper bound
+            odv1u = mu1 + k * sigma1
+            ## Outlier  detection value lower bound
+            odv1l = mu1 - k * sigma1
+            ##Filter out outliers from upper and lower bounds
+            new_data = current_direction[np.where(current_direction <= odv1u)[0]]
+            new_data = new_data[np.where(new_data >= odv1l)[0]]
+
+            ## Second stage of filternig with a tighter bound 
+            mu2 = np.mean(new_data)
+            sigma2 = np.std(new_data)
+            k = 1./ np.sqrt(pp2)
+            odv2u = mu2 + k * sigma2
+            odv2l = mu2 - k * sigma2
+
+            ## Final filtered data after tighter bounds
+            final_data = new_data[np.where(new_data <= odv2u)[0]]
+            final_data = new_data[np.where(final_data >= odv2l)[0]]
+            
+            ## If data is forward motion
+
+            if motion_index[0]==0:
+
+                
+
+                ## Initialise the x values 
+                if index==0:
+                   
+
+                    filtered_data_forward=final_data                                
 
 
-    return final_data
+
+                ## Adding the y values 
+                else:                    
+
+                    ## Check if x values are less than y values if so filter out the exrta y values to 
+                    ## make the vectors equal in length
+                    if len(filtered_data_forward)<= len(final_data):
+
+                        filtered_data_forward=np.vstack((filtered_data_forward,final_data[0:len(final_data)]))
+                        filtered_data_forward=np.transpose(filtered_data_forward)                        
+                            
+
+                    ## Check if y values are less than x values if so filter out the extra x values to 
+                    ## make the vectors equal in length
+                    else:
+                        filtered_data_forward=np.vstack((filtered_data_forward[0:len(final_data)],final_data))
+                        filtered_data_forward=np.transpose(filtered_data_forward) 
+                        
+
+            ## If data is left motion
+
+            if motion_index[0]==3:
+
+                ## Initialise the x values 
+                if index==0:
+                    
+                    filtered_data_left=final_data
+
+                ## Adding the y values 
+                else:                    
+
+                    ## Check if x values are less than y values if so filter out the exrta y values to 
+                    ## make the vectors equal in length
+                    if len(filtered_data_left)<= len(final_data):
+                        filtered_data_left=np.vstack((filtered_data_left,final_data[0:len(final_data)]))
+                        filtered_data_left=np.transpose(filtered_data_left)
+                        
+
+                    ## Check if y values are less than x values if so filter out the extra x values to 
+                    ## make the vectors equal in length
+                    else:
+                        filtered_data_left=np.vstack((filtered_data_left[0:len(final_data)],final_data))
+                        filtered_data_left=np.transpose(filtered_data_left)
+                        
+            
+
+            ## If data is forward right
+
+            if motion_index[0]==6:
+
+                ## Initialise the x values 
+                if index==0:
+                    
+                    filtered_data_right=final_data
+
+                ## Adding the y values 
+                else:                    
+
+                    ## Check if x values are less than y values if so filter out the exrta y values to 
+                    ## make the vectors equal in length
+                    if len(filtered_data_right)<= len(final_data):
+                        filtered_data_right=np.vstack((filtered_data_right,final_data[0:len(final_data)]))
+                        filtered_data_right=np.transpose(filtered_data_right)
+                    
+                        
+
+                    ## Check if y values are less than x values if so filter out the extra x values to 
+                    ## make the vectors equal in length
+                    else:
+                        filtered_data_right=np.vstack((filtered_data_right[0:len(final_data)],final_data))
+                        filtered_data_right=np.transpose(filtered_data_right)  
+                        
+
+
+
+
+    ## Looking for vector with shortest lenght        
+    min_motion_lenth=np.min([len(filtered_data_forward),len(filtered_data_left),len(filtered_data_right)])
+
+    ## Resize all accoding to min length
+    filtered_data=np.hstack((filtered_data_forward[0:min_motion_lenth,:],filtered_data_left[0:min_motion_lenth,:],filtered_data_right[0:min_motion_lenth,:]))
+ 
+    
+
+    return filtered_data
     
 def gaussian_ellipsis(data): 
     '''
@@ -312,30 +438,23 @@ def gaussian_distribution(data):
             plot_title_x="Right data for x"
             plot_title_y="Right data for y"
 
-        plt.figure()
-        plt.plot(x_range,norm.pdf(x_range,x_mean,x_std),label='Gaussian')
-        plt.hist(current_data[:,0],bins=x_n_bins,ec='black',density=True,label='Histogram')
-        plt.title(plot_title_x)
-        plt.xlabel('Data')
-        plt.ylabel('P(x)')
-        plt.legend()
-        plt.grid()
+   
 
+        gaus_figures=plt.figure(figsize=(12,8))
+        ax1=gaus_figures.add_subplot(121)
+        ax1.plot(x_range,norm.pdf(x_range,x_mean,x_std),label='Gaussian')
+        ax1.hist(current_data[:,0],bins=x_n_bins,ec='black',density=True,label='Histogram')
+        ax1.set(title=plot_title_x,xlabel='Data',ylabel='P(x)')
+        ax1.grid()
+        ax1.legend()
 
-        plt.figure()
-
-        
-        plt.plot(y_range,norm.pdf(y_range,y_mean,y_std),label='Gaussian')
-        plt.hist(current_data[:,1],bins=y_n_bins,ec='black',density=True,label='Histogram')
-        plt.title(plot_title_y)
-        plt.xlabel('Data')
-        plt.ylabel('P(y)')
-        plt.legend()
-        plt.grid()
-
-
-
-
+        ax2=gaus_figures.add_subplot(122)
+        ax2.plot(y_range,norm.pdf(y_range,y_mean,y_std),label='Gaussian')
+        ax2.hist(current_data[:,1],bins=y_n_bins,ec='black',density=True,label='Histogram')
+        ax2.set(title=plot_title_y,xlabel='Data',ylabel='P(x)')
+        ax2.grid()
+        ax2.legend() 
+       
         plt.show()
 
    
@@ -346,5 +465,9 @@ def gaussian_distribution(data):
 
 
 if __name__=='__main__':
-    group_4_data,group_all_data=load_data()
-    gaussian_distribution(group_all_data)
+    group_4_data,other_group_data=load_data()
+    all_group_data=np.vstack((group_4_data,other_group_data))
+    
+    fitered_all_data=remove_outliers(all_group_data,0.1,0.01)
+ 
+    gaussian_distribution(fitered_all_data)
