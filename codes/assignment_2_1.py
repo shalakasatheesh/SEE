@@ -247,6 +247,61 @@ def remove_outliers(data,std_no,plot_title):
 
     return final_data
     
+
+
+def confidence_ellipse(x, y, ax, n_std=3.0, facecolor='none', **kwargs):
+    """
+    Create a plot of the covariance confidence ellipse of *x* and *y*.
+
+    Parameters
+    ----------
+    x, y : array-like, shape (n, )
+        Input data.
+
+    ax : matplotlib.axes.Axes
+        The axes object to draw the ellipse into.
+
+    n_std : float
+        The number of standard deviations to determine the ellipse's radiuses.
+
+    **kwargs
+        Forwarded to `~matplotlib.patches.Ellipse`
+
+    Returns
+    -------
+    matplotlib.patches.Ellipse
+    """
+    if x.size != y.size:
+        raise ValueError("x and y must be the same size")
+
+    cov = np.cov(x, y)
+    pearson = cov[0, 1]/np.sqrt(cov[0, 0] * cov[1, 1])
+    # Using a special case to obtain the eigenvalues of this
+    # two-dimensionl dataset.
+    ell_radius_x = np.sqrt(1 + pearson)
+    ell_radius_y = np.sqrt(1 - pearson)
+    ellipse = Ellipse((0, 0), width=ell_radius_x * 2, height=ell_radius_y * 2,
+                      facecolor=facecolor, **kwargs)
+
+    # Calculating the stdandard deviation of x from
+    # the squareroot of the variance and multiplying
+    # with the given number of standard deviations.
+    scale_x = np.sqrt(cov[0, 0]) * n_std
+    mean_x = np.mean(x)
+
+    # calculating the stdandard deviation of y ...
+    scale_y = np.sqrt(cov[1, 1]) * n_std
+    mean_y = np.mean(y)
+
+    transf = transforms.Affine2D() \
+        .rotate_deg(45) \
+        .scale(scale_x, scale_y) \
+        .translate(mean_x, mean_y)
+
+    ellipse.set_transform(transf + ax.transData)
+    return ax.add_patch(ellipse)
+
+
 def gaussian_ellipsis(data): 
     '''
     Print the confidence ellipsis of the data we collected
@@ -309,17 +364,11 @@ def gaussian_distribution(data,plot_title):
 
     plt.show()
 
-
-   
-
-    
-
-if __name__=='__main__':
-    group_4_data,other_group_data=load_data()
-    all_group_data=np.vstack((group_4_data,other_group_data))
-    
-
+def compare_gauss_vs_hist(all_group_data):
+    #######################################################
     ## Loop throug all motions and direcions while removing outliers and comparing its gaussian
+    ########################################################
+
     for motion_index in range(0,9):
         current_motion=all_group_data[:,motion_index]
         
@@ -355,3 +404,65 @@ if __name__=='__main__':
         fitered_data=remove_outliers(current_motion,2,plot_title) 
         
         gaussian_distribution(fitered_data,plot_title)
+
+
+def plot_ellipsis(data):
+        
+# #######################################################
+# ## 2D gauss plots
+# ##########################################################
+
+
+    for motion_index in range(0,9,3):
+            current_motion=all_group_data[:,motion_index]
+            
+            if motion_index==0:
+                plot_title="Forward motion"            
+
+           
+            if motion_index==3:
+                plot_title="Left motion"        
+
+
+            if motion_index==6:
+                plot_title="Right motion"
+
+            
+
+            fig, ax_nstd = plt.subplots(figsize=(6, 6))
+            ax_nstd.axvline(c='grey', lw=1)
+            ax_nstd.axhline(c='grey', lw=1)
+
+            x= data[:,motion_index]
+            x_range=[np.min(x),np.max(x)]
+            y= data[:,motion_index+1]
+            y_range=[np.min(y),np.max(y)]
+            ax_nstd.scatter(x, y, s=0.5)
+
+            mu=[np.mean(x),np.mean(y)]
+
+            confidence_ellipse(x, y, ax_nstd, n_std=1,
+                            label=r'$1\sigma$', edgecolor='firebrick')
+            confidence_ellipse(x, y, ax_nstd, n_std=2,
+                            label=r'$2\sigma$', edgecolor='fuchsia', linestyle='--')
+            confidence_ellipse(x, y, ax_nstd, n_std=3,
+                            label=r'$3\sigma$', edgecolor='blue', linestyle=':')
+
+            ax_nstd.scatter(mu[0], mu[1], c='red', s=3)    
+            ax_nstd.set(title=plot_title,xlim=(x_range[0]-4,x_range[1]+2),ylim=(y_range[0]-2,y_range[1]+2),xlabel='x(cm)',ylabel='y(cm)')
+            
+            ax_nstd.legend()
+            ax_nstd.grid()
+            plt.show()
+
+   
+
+    
+
+if __name__=='__main__':
+    group_4_data,other_group_data=load_data()
+    all_group_data=np.vstack((group_4_data,other_group_data))
+
+    compare_gauss_vs_hist(all_group_data)
+    plot_ellipsis(all_group_data)
+    
