@@ -201,7 +201,7 @@ def load_data():
 
 
 
-def remove_outliers(data, pp1, pp2):
+def remove_outliers(data,std_no,plot_title):
     '''
         Based on "Data Outlier Detection using the Chebyshev Theorem",
         Brett G. Amidan, Thomas A. Ferryman, and Scott K. Cooley
@@ -215,157 +215,93 @@ def remove_outliers(data, pp1, pp2):
         Parameters
         -----------
         data -- A numpy array of discrete or continuous data
-        pp1 -- likelihood of expected outliers (e.g. 0.1, 0.05 , 0.01)
-        pp2 -- final likelihood of real outliers (e.g. 0.01, 0.001 , 0.0001)
+        std_no    -- No of deviatations to remove
 
         Returns
         -----------
         filtered_data: Data with outliers removed
     '''
+    ori_data_count=len(data)
 
-    ## Create an list to store new filered data
-    filtered_data_forward=np.array([])
-    filtered_data_left=np.array([])
-    filtered_data_right=np.array([])
+     ##Mean and standard deviation of data
+    mu = np.mean(data)
+    sigma = np.std(data)
 
+    ## k is the no of standard deviations
     
-    ## Loop between all three motion types
-    for motion_index in [[0,3],[3,6],[6,9]]:
-        
-        current_motion=data[:,motion_index[0]:motion_index[1]]
-        
-    
+    k=std_no
+    ## Outlier detection value upper bound
+    odv1u = mu + k * sigma
+    ## Outlier  detection value lower bound
+    odv1l = mu - k * sigma
+    ##Filter out outliers from upper and lower bounds
+    final_data = data[np.where(data <= odv1u)[0]]
+    final_data = final_data[np.where(final_data >= odv1l)[0]]
+
+    ##No of data poitns after filter
+    fil_data_count=len(final_data)
 
 
-        ##Loop between x and y
-        
-        for index in [0,1]:
-            current_direction=current_motion[:,index]
-            
-            ##Mean and standard deviation of data
-            mu1 = np.mean(current_direction)
-            sigma1 = np.std(current_direction)
-
-            ## k is the no of standard deviations
-            k = 1./ np.sqrt(pp1)
-            ## Outlier detection value upper bound
-            odv1u = mu1 + k * sigma1
-            ## Outlier  detection value lower bound
-            odv1l = mu1 - k * sigma1
-            ##Filter out outliers from upper and lower bounds
-            new_data = current_direction[np.where(current_direction <= odv1u)[0]]
-            new_data = new_data[np.where(new_data >= odv1l)[0]]
-
-            ## Second stage of filternig with a tighter bound 
-            mu2 = np.mean(new_data)
-            sigma2 = np.std(new_data)
-            k = 1./ np.sqrt(pp2)
-            odv2u = mu2 + k * sigma2
-            odv2l = mu2 - k * sigma2
-
-            ## Final filtered data after tighter bounds
-            final_data = new_data[np.where(new_data <= odv2u)[0]]
-            final_data = new_data[np.where(final_data >= odv2l)[0]]
-            
-            ## If data is forward motion
-
-            if motion_index[0]==0:
-
-                
-
-                ## Initialise the x values 
-                if index==0:
-                   
-
-                    filtered_data_forward=final_data                                
+    print(f'Filtered data summart for {plot_title}\nStart data points: {ori_data_count} Outliers:{ori_data_count-fil_data_count}\n')
 
 
-
-                ## Adding the y values 
-                else:                    
-
-                    ## Check if x values are less than y values if so filter out the exrta y values to 
-                    ## make the vectors equal in length
-                    if len(filtered_data_forward)<= len(final_data):
-
-                        filtered_data_forward=np.vstack((filtered_data_forward,final_data[0:len(final_data)]))
-                        filtered_data_forward=np.transpose(filtered_data_forward)                        
-                            
-
-                    ## Check if y values are less than x values if so filter out the extra x values to 
-                    ## make the vectors equal in length
-                    else:
-                        filtered_data_forward=np.vstack((filtered_data_forward[0:len(final_data)],final_data))
-                        filtered_data_forward=np.transpose(filtered_data_forward) 
-                        
-
-            ## If data is left motion
-
-            if motion_index[0]==3:
-
-                ## Initialise the x values 
-                if index==0:
-                    
-                    filtered_data_left=final_data
-
-                ## Adding the y values 
-                else:                    
-
-                    ## Check if x values are less than y values if so filter out the exrta y values to 
-                    ## make the vectors equal in length
-                    if len(filtered_data_left)<= len(final_data):
-                        filtered_data_left=np.vstack((filtered_data_left,final_data[0:len(final_data)]))
-                        filtered_data_left=np.transpose(filtered_data_left)
-                        
-
-                    ## Check if y values are less than x values if so filter out the extra x values to 
-                    ## make the vectors equal in length
-                    else:
-                        filtered_data_left=np.vstack((filtered_data_left[0:len(final_data)],final_data))
-                        filtered_data_left=np.transpose(filtered_data_left)
-                        
-            
-
-            ## If data is forward right
-
-            if motion_index[0]==6:
-
-                ## Initialise the x values 
-                if index==0:
-                    
-                    filtered_data_right=final_data
-
-                ## Adding the y values 
-                else:                    
-
-                    ## Check if x values are less than y values if so filter out the exrta y values to 
-                    ## make the vectors equal in length
-                    if len(filtered_data_right)<= len(final_data):
-                        filtered_data_right=np.vstack((filtered_data_right,final_data[0:len(final_data)]))
-                        filtered_data_right=np.transpose(filtered_data_right)
-                    
-                        
-
-                    ## Check if y values are less than x values if so filter out the extra x values to 
-                    ## make the vectors equal in length
-                    else:
-                        filtered_data_right=np.vstack((filtered_data_right[0:len(final_data)],final_data))
-                        filtered_data_right=np.transpose(filtered_data_right)  
-                        
-
-
-
-
-    ## Looking for vector with shortest lenght        
-    min_motion_lenth=np.min([len(filtered_data_forward),len(filtered_data_left),len(filtered_data_right)])
-
-    ## Resize all accoding to min length
-    filtered_data=np.hstack((filtered_data_forward[0:min_motion_lenth,:],filtered_data_left[0:min_motion_lenth,:],filtered_data_right[0:min_motion_lenth,:]))
- 
+    return final_data
     
 
-    return filtered_data
-    
+
+def confidence_ellipse(x, y, ax, n_std=3.0, facecolor='none', **kwargs):
+    """
+    Create a plot of the covariance confidence ellipse of *x* and *y*.
+
+    Parameters
+    ----------
+    x, y : array-like, shape (n, )
+        Input data.
+
+    ax : matplotlib.axes.Axes
+        The axes object to draw the ellipse into.
+
+    n_std : float
+        The number of standard deviations to determine the ellipse's radiuses.
+
+    **kwargs
+        Forwarded to `~matplotlib.patches.Ellipse`
+
+    Returns
+    -------
+    matplotlib.patches.Ellipse
+    """
+    if x.size != y.size:
+        raise ValueError("x and y must be the same size")
+
+    cov = np.cov(x, y)
+    pearson = cov[0, 1]/np.sqrt(cov[0, 0] * cov[1, 1])
+    # Using a special case to obtain the eigenvalues of this
+    # two-dimensionl dataset.
+    ell_radius_x = np.sqrt(1 + pearson)
+    ell_radius_y = np.sqrt(1 - pearson)
+    ellipse = Ellipse((0, 0), width=ell_radius_x * 2, height=ell_radius_y * 2,
+                      facecolor=facecolor, **kwargs)
+
+    # Calculating the stdandard deviation of x from
+    # the squareroot of the variance and multiplying
+    # with the given number of standard deviations.
+    scale_x = np.sqrt(cov[0, 0]) * n_std
+    mean_x = np.mean(x)
+
+    # calculating the stdandard deviation of y ...
+    scale_y = np.sqrt(cov[1, 1]) * n_std
+    mean_y = np.mean(y)
+
+    transf = transforms.Affine2D() \
+        .rotate_deg(45) \
+        .scale(scale_x, scale_y) \
+        .translate(mean_x, mean_y)
+
+    ellipse.set_transform(transf + ax.transData)
+    return ax.add_patch(ellipse)
+
+
 def gaussian_ellipsis(data): 
     '''
     Print the confidence ellipsis of the data we collected
@@ -389,85 +325,233 @@ def gaussian_ellipsis(data):
 
         
 
-
-
-
-
-def gaussian_distribution(data):
+def PCA(X: np.array, k: int) -> np.array:
     '''
-    Take in a data set and fit to gaussian
+    X : Data
+    k : No of dimensio
+    
+    
+    '''
+    cov = np.cov(X)
+    eigenvalues, eigenvectors = np.linalg.eigh(cov)
+    k_largest_eigenvalue_idx = np.argsort(eigenvalues)[::-1][0:k]
+    W = eigenvectors[:,k_largest_eigenvalue_idx]
+    Y = W.T.dot(X)
+
+    return Y
+
+
+
+
+
+def gaussian_distribution(data,plot_title):
+    '''
+    Take in a data set and compare its histogram 
+    with a gausian usnig matplotlib
 
 
     Parameters
     ----------
-    data : has the form [[forward],[left],[right]]
+    data : data of a particual motion
+    plot_title  : Title of the plot
     
 
     
     '''
 
-    ## Looping through the indexes of forward,left and right motions
-    for motion_index in [[0,3],[3,6],[6,9]]:
-        current_data=data[:,motion_index[0]:motion_index[1]]
-        x_mean=np.mean(current_data[:,0])
-        x_std =np.std(current_data[:,0])
+         
+
+    data_mean=np.mean(data)
+    data_std =np.std(data)
+  
         ## Freedman–Diaconis rule for calculating number of bins in a histogram
         ## https://en.wikipedia.org/wiki/Freedman%E2%80%93Diaconis_rule
-        x_n_bins=int(round((np.max(current_data[:,0])-np.min(current_data[:,0]))/(2*iqr(current_data[:,0])*len(current_data)**(-1/3))))
-        x_range=np.arange(np.min(current_data[:,0]),np.max(current_data[:,0]),0.1)
+    n_bins=int(round((np.max(data)-np.min(data))/(2*iqr(data)*len(data)**(-1/3))))
+    data_range=np.arange(np.min(data),np.max(data),0.1)
+
+    gaus_figures=plt.figure(figsize=(6,4))
+    ax1=gaus_figures.add_subplot(111)
+    ax1.plot(data_range,norm.pdf(data_range,data_mean,data_std),label='Gaussian')
+    ax1.hist(data,bins=n_bins,ec='black',density=True,label='Histogram')
+    ax1.set(title=plot_title,xlabel='Data',ylabel='P(x)')
+    ax1.grid()
+    ax1.legend()
+
+    plt.show()
+
+
+#########################
+##Action functions
+########################
+
+def compare_gauss_vs_hist(data):
+    '''
+    Action funcion to run plotting the gaussian histograms together
+    Loop throug all motions and direcions while removing outliers and comparing its gaussian
+    
+    '''
+
+
+    for motion_index in range(0,9):
+        current_motion=data[:,motion_index]
+        
+        if motion_index==0:
+            plot_title="Forward motion x direction"            
+
+        if motion_index==1:
+            plot_title="Forward motion y direction"
+
+        if motion_index==2:
+            plot_title="Forward motion theta"
+
+        if motion_index==3:
+            plot_title="Left motion x direction"        
+
+        if motion_index==4:
+            plot_title="Left motion y direction"
+
+        if motion_index==5:
+            plot_title="Left motion theta direction"
+
+        if motion_index==6:
+            plot_title="Right motion x direction"
+
+        if motion_index==7:
+            plot_title="Right motion y direction"
+
+        if motion_index==8:
+            plot_title="Right motion theta direction"
+
+
+
+        fitered_data=remove_outliers(current_motion,2,plot_title) 
+        
+        gaussian_distribution(fitered_data,plot_title)
+
+
+def plot_ellipsis(data):
+    '''
+    Action function to run ellipsis plots
+    
+    '''
+        
+
+
+
+    for motion_index in range(0,9,3):
+            current_motion=all_group_data[:,motion_index]
+            
+            if motion_index==0:
+                plot_title="Forward motion"            
+
+           
+            if motion_index==3:
+                plot_title="Left motion"        
+
+
+            if motion_index==6:
+                plot_title="Right motion"
+
             
 
+            fig, ax_nstd = plt.subplots(figsize=(6, 6))
+            ax_nstd.axvline(c='grey', lw=1)
+            ax_nstd.axhline(c='grey', lw=1)
 
+            x= data[:,motion_index]
+            x_range=[np.min(x),np.max(x)]
+            y= data[:,motion_index+1]
+            y_range=[np.min(y),np.max(y)]
+            ax_nstd.scatter(x, y, s=0.5)
 
+            mu=[np.mean(x),np.mean(y)]
 
-        y_mean=np.mean(current_data[:,1])
-        y_std =np.std(current_data[:,1])
-        y_n_bins=int(round((np.max(current_data[:,1])-np.min(current_data[:,1]))/(2*iqr(current_data[:,1])*len(current_data)**(-1/3))))
-        y_range=np.arange(np.min(current_data[:,1]),np.max(current_data[:,1]),0.1)
+            confidence_ellipse(x, y, ax_nstd, n_std=1,
+                            label=r'$1\sigma$', edgecolor='firebrick')
+            confidence_ellipse(x, y, ax_nstd, n_std=2,
+                            label=r'$2\sigma$', edgecolor='fuchsia', linestyle='--')
+            confidence_ellipse(x, y, ax_nstd, n_std=3,
+                            label=r'$3\sigma$', edgecolor='blue', linestyle=':')
 
-
-        if motion_index[0]==0:
-            plot_title_x="Forward data for x"
-            plot_title_y="Forward data for y"
-
-        if motion_index[0]==3:
-            plot_title_x="Left data for x"
-            plot_title_y="Left data for y"
-
-        if motion_index[0]==6:
-            plot_title_x="Right data for x"
-            plot_title_y="Right data for y"
+            ax_nstd.scatter(mu[0], mu[1], c='red', s=3)    
+            ax_nstd.set(title=plot_title,xlim=(x_range[0]-4,x_range[1]+2),ylim=(y_range[0]-2,y_range[1]+2),xlabel='x(cm)',ylabel='y(cm)')
+            
+            ax_nstd.legend()
+            ax_nstd.grid()
+            plt.show()
 
    
 
-        gaus_figures=plt.figure(figsize=(12,8))
-        ax1=gaus_figures.add_subplot(121)
-        ax1.plot(x_range,norm.pdf(x_range,x_mean,x_std),label='Gaussian')
-        ax1.hist(current_data[:,0],bins=x_n_bins,ec='black',density=True,label='Histogram')
-        ax1.set(title=plot_title_x,xlabel='Data',ylabel='P(x)')
-        ax1.grid()
-        ax1.legend()
+def compute_PCA(data):
+    '''
+    Reduce the dimensionality of data 
+    and plot the ellipse of it 
+    
+    '''
 
-        ax2=gaus_figures.add_subplot(122)
-        ax2.plot(y_range,norm.pdf(y_range,y_mean,y_std),label='Gaussian')
-        ax2.hist(current_data[:,1],bins=y_n_bins,ec='black',density=True,label='Histogram')
-        ax2.set(title=plot_title_y,xlabel='Data',ylabel='P(x)')
-        ax2.grid()
-        ax2.legend() 
-       
+
+    for motion_index in range(0,9,3):
+        
+        current_motion=data[:,motion_index:motion_index+3]
+        
+        
+        
+        if motion_index==0:
+            plot_title="Forward motion distribution after PCA"            
+
+        
+        if motion_index==3:
+            plot_title="Left motion distribution after PCA"        
+
+
+        if motion_index==6:
+            plot_title="Right motion distribution after PCA"
+
+
+
+        current_motion=np.transpose(current_motion)        
+        Y = PCA(current_motion,2)   
+        Y=np.transpose(Y)
+
+        fig, ax_nstd = plt.subplots(figsize=(6, 6))
+        ax_nstd.axvline(c='grey', lw=1)
+        ax_nstd.axhline(c='grey', lw=1)
+
+        x=Y[:,0]
+        x_range=[np.min(x),np.max(x)]
+        y=Y[:,1]
+        y_range=[np.min(y),np.max(y)]
+        ax_nstd.scatter(x, y, s=0.5)
+
+        mu=[np.mean(x),np.mean(y)]
+
+        confidence_ellipse(x, y, ax_nstd, n_std=1,
+                        label=r'$1\sigma$', edgecolor='firebrick')
+        confidence_ellipse(x, y, ax_nstd, n_std=2,
+                        label=r'$2\sigma$', edgecolor='fuchsia', linestyle='--')
+        confidence_ellipse(x, y, ax_nstd, n_std=3,
+                        label=r'$3\sigma$', edgecolor='blue', linestyle=':')
+
+        ax_nstd.scatter(mu[0], mu[1], c='red', s=3)    
+        ax_nstd.set(title=plot_title,xlim=(x_range[0]-10,x_range[1]+10),ylim=(y_range[0]-10,y_range[1]+20),xlabel='PC1',ylabel='PC2')
+        
+        ax_nstd.legend()
+        ax_nstd.grid()
         plt.show()
+        
+          
 
-   
 
     
 
-
-
+    
 
 if __name__=='__main__':
     group_4_data,other_group_data=load_data()
     all_group_data=np.vstack((group_4_data,other_group_data))
+
+    # compare_gauss_vs_hist(all_group_data)
+    # plot_ellipsis(all_group_data)
+    # compute_PCA(all_group_data)
+
     
-    fitered_all_data=remove_outliers(all_group_data,0.1,0.01)
- 
-    gaussian_distribution(fitered_all_data)
