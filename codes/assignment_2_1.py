@@ -325,6 +325,21 @@ def gaussian_ellipsis(data):
 
         
 
+def PCA(X: np.array, k: int) -> np.array:
+    '''
+    X : Data
+    k : No of dimensio
+    
+    
+    '''
+    cov = np.cov(X)
+    eigenvalues, eigenvectors = np.linalg.eigh(cov)
+    k_largest_eigenvalue_idx = np.argsort(eigenvalues)[::-1][0:k]
+    W = eigenvectors[:,k_largest_eigenvalue_idx]
+    Y = W.T.dot(X)
+
+    return Y
+
 
 
 
@@ -364,13 +379,21 @@ def gaussian_distribution(data,plot_title):
 
     plt.show()
 
-def compare_gauss_vs_hist(all_group_data):
-    #######################################################
-    ## Loop throug all motions and direcions while removing outliers and comparing its gaussian
-    ########################################################
+
+#########################
+##Action functions
+########################
+
+def compare_gauss_vs_hist(data):
+    '''
+    Action funcion to run plotting the gaussian histograms together
+    Loop throug all motions and direcions while removing outliers and comparing its gaussian
+    
+    '''
+
 
     for motion_index in range(0,9):
-        current_motion=all_group_data[:,motion_index]
+        current_motion=data[:,motion_index]
         
         if motion_index==0:
             plot_title="Forward motion x direction"            
@@ -407,10 +430,12 @@ def compare_gauss_vs_hist(all_group_data):
 
 
 def plot_ellipsis(data):
+    '''
+    Action function to run ellipsis plots
+    
+    '''
         
-# #######################################################
-# ## 2D gauss plots
-# ##########################################################
+
 
 
     for motion_index in range(0,9,3):
@@ -457,12 +482,41 @@ def plot_ellipsis(data):
 
    
 
+def compute_PCA(data):
+
+
+    for motion_index in range(0,9,3):
+        
+        current_motion=data[:,motion_index:motion_index+2]
+        
+        
+        
+        if motion_index==0:
+            plot_title="Forward motion"            
+
+        
+        if motion_index==3:
+            plot_title="Left motion"        
+
+
+        if motion_index==6:
+            plot_title="Right motion"
+
+        current_motion=np.transpose(current_motion)        
+        Y = PCA(current_motion,1)               
+        gaussian_distribution(Y.T,plot_title)
+
+
+    
+
     
 
 if __name__=='__main__':
     group_4_data,other_group_data=load_data()
     all_group_data=np.vstack((group_4_data,other_group_data))
 
-    compare_gauss_vs_hist(all_group_data)
-    plot_ellipsis(all_group_data)
+    # compare_gauss_vs_hist(all_group_data)
+    # plot_ellipsis(all_group_data)
+    compute_PCA(all_group_data)
+
     
