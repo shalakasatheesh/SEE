@@ -492,15 +492,15 @@ def compute_PCA(data):
         
         
         if motion_index==0:
-            plot_title="Forward motion"            
+            plot_title="Forward motion distribution after PCA"            
 
         
         if motion_index==3:
-            plot_title="Left motion"        
+            plot_title="Left motion distribution after PCA"        
 
 
         if motion_index==6:
-            plot_title="Right motion"
+            plot_title="Right motion distribution after PCA"
 
         current_motion=np.transpose(current_motion)        
         Y = PCA(current_motion,1)               
