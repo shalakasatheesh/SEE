@@ -201,7 +201,7 @@ def load_data():
 
 
 
-def remove_outliers(data,std_no):
+def remove_outliers(data,std_no,plot_title):
     '''
         Based on "Data Outlier Detection using the Chebyshev Theorem",
         Brett G. Amidan, Thomas A. Ferryman, and Scott K. Cooley
@@ -238,11 +238,12 @@ def remove_outliers(data,std_no):
     final_data = data[np.where(data <= odv1u)[0]]
     final_data = final_data[np.where(final_data >= odv1l)[0]]
 
+    ##No of data poitns after filter
     fil_data_count=len(final_data)
 
 
-    print(f'Started with {ori_data_count} and ended with {fil_data_count}')
-    
+    print(f'Filtered data summart for {plot_title}\nStart data points: {ori_data_count} Outliers:{ori_data_count-fil_data_count}\n')
+
 
     return final_data
     
@@ -282,28 +283,13 @@ def gaussian_distribution(data,plot_title):
     Parameters
     ----------
     data : data of a particual motion
-    cat  : category of data eg : Forward motion x direction etc.
+    plot_title  : Title of the plot
     
 
     
     '''
 
-    # if cat=='fx':
-    #         plot_title="Forward motion x direction"
-            
-
-    # if cat=='fy':
-    #     plot_title="Forward motion y direction"
-
-    # if cat=='ly':
-    #        plot_title="Left motion y direction"
-
-    # if cat=='rx':
-    #     plot_title="Right motion x direction"
-
-    # if cat=='ry':
-    #     plot_title="Right motion y direction"
-       
+         
 
     data_mean=np.mean(data)
     data_std =np.std(data)
@@ -366,6 +352,6 @@ if __name__=='__main__':
 
 
 
-        fitered_data=remove_outliers(current_motion,2) 
+        fitered_data=remove_outliers(current_motion,2,plot_title) 
         
         gaussian_distribution(fitered_data,plot_title)
