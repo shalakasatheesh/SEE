@@ -483,11 +483,16 @@ def plot_ellipsis(data):
    
 
 def compute_PCA(data):
+    '''
+    Reduce the dimensionality of data 
+    and plot the ellipse of it 
+    
+    '''
 
 
     for motion_index in range(0,9,3):
         
-        current_motion=data[:,motion_index:motion_index+2]
+        current_motion=data[:,motion_index:motion_index+3]
         
         
         
@@ -502,9 +507,39 @@ def compute_PCA(data):
         if motion_index==6:
             plot_title="Right motion distribution after PCA"
 
+
+
         current_motion=np.transpose(current_motion)        
-        Y = PCA(current_motion,1)               
-        gaussian_distribution(Y.T,plot_title)
+        Y = PCA(current_motion,2)   
+        Y=np.transpose(Y)
+
+        fig, ax_nstd = plt.subplots(figsize=(6, 6))
+        ax_nstd.axvline(c='grey', lw=1)
+        ax_nstd.axhline(c='grey', lw=1)
+
+        x=Y[:,0]
+        x_range=[np.min(x),np.max(x)]
+        y=Y[:,1]
+        y_range=[np.min(y),np.max(y)]
+        ax_nstd.scatter(x, y, s=0.5)
+
+        mu=[np.mean(x),np.mean(y)]
+
+        confidence_ellipse(x, y, ax_nstd, n_std=1,
+                        label=r'$1\sigma$', edgecolor='firebrick')
+        confidence_ellipse(x, y, ax_nstd, n_std=2,
+                        label=r'$2\sigma$', edgecolor='fuchsia', linestyle='--')
+        confidence_ellipse(x, y, ax_nstd, n_std=3,
+                        label=r'$3\sigma$', edgecolor='blue', linestyle=':')
+
+        ax_nstd.scatter(mu[0], mu[1], c='red', s=3)    
+        ax_nstd.set(title=plot_title,xlim=(x_range[0]-10,x_range[1]+10),ylim=(y_range[0]-10,y_range[1]+20),xlabel='PC1',ylabel='PC2')
+        
+        ax_nstd.legend()
+        ax_nstd.grid()
+        plt.show()
+        
+          
 
 
     
@@ -517,6 +552,6 @@ if __name__=='__main__':
 
     # compare_gauss_vs_hist(all_group_data)
     # plot_ellipsis(all_group_data)
-    compute_PCA(all_group_data)
+    # compute_PCA(all_group_data)
 
     
