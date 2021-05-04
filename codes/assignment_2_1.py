@@ -201,8 +201,172 @@ def load_data():
 
 
 
-def remove_outliers(data, pp1, pp2):
+def remove_outliers(data,std_no):
     '''
+        Based on "Data Outlier Detection using the Chebyshev Theorem",
+        Brett G. Amidan, Thomas A. Ferryman, and Scott K. Cooley
+
+        Based on the lecture slide of SEE at HBRS
+
+        Reference:
+        https://kyrcha.info/2019/11/26/data-outlier-detection-using-the-chebyshev-theorem-paper-review-and-online-adaptation
+
+
+        Parameters
+        -----------
+        data -- A numpy array of discrete or continuous data
+        std_no    -- No of deviatations to remove
+
+        Returns
+        -----------
+        filtered_data: Data with outliers removed
+    '''
+
+    ## Create an list to store new filered data
+    filtered_data_forward=np.array([])
+    filtered_data_left=np.array([])
+    filtered_data_right=np.array([])
+
+    
+    ## Loop between all three motion types
+    for motion_index in [[0,3],[3,6],[6,9]]:
+        
+        current_motion=data[:,motion_index[0]:motion_index[1]]
+        
+    
+
+
+        ##Loop between x and y
+        
+        for index in [0,1]:
+            current_direction=current_motion[:,index]
+            
+            ##Mean and standard deviation of data
+            mu = np.mean(current_direction)
+            sigma = np.std(current_direction)
+
+            ## k is the no of standard deviations
+          
+            k=std_no
+            ## Outlier detection value upper bound
+            odv1u = mu + k * sigma
+            ## Outlier  detection value lower bound
+            odv1l = mu - k * sigma
+            ##Filter out outliers from upper and lower bounds
+            final_data = current_direction[np.where(current_direction <= odv1u)[0]]
+            final_data = final_data[np.where(final_data >= odv1l)[0]]
+
+
+
+            
+
+            ## If data is forward motion
+
+            if motion_index[0]==0:
+
+                
+
+                ## Initialise the x values 
+                if index==0:
+                   
+
+                    filtered_data_forward=final_data                                
+
+
+
+                ## Adding the y values 
+                else:                    
+
+                    ## Check if x values are less than y values if so filter out the exrta y values to 
+                    ## make the vectors equal in length
+                    if len(filtered_data_forward)<= len(final_data):
+
+                        print(f'flter {filtered_data_forward.shape} and final{final_data.shape}')
+
+                        filtered_data_forward=np.vstack((filtered_data_forward,final_data[0:len(final_data)]))
+                        filtered_data_forward=np.transpose(filtered_data_forward)                        
+                            
+
+                    ## Check if y values are less than x values if so filter out the extra x values to 
+                    ## make the vectors equal in length
+                    else:
+                        filtered_data_forward=np.vstack((filtered_data_forward[0:len(final_data)],final_data))
+                        filtered_data_forward=np.transpose(filtered_data_forward) 
+                        
+
+            ## If data is left motion
+
+            if motion_index[0]==3:
+
+                ## Initialise the x values 
+                if index==0:
+                    
+                    filtered_data_left=final_data
+
+                ## Adding the y values 
+                else:                    
+
+                    ## Check if x values are less than y values if so filter out the exrta y values to 
+                    ## make the vectors equal in length
+                    if len(filtered_data_left)<= len(final_data):
+                        filtered_data_left=np.vstack((filtered_data_left,final_data[0:len(final_data)]))
+                        filtered_data_left=np.transpose(filtered_data_left)
+                        
+
+                    ## Check if y values are less than x values if so filter out the extra x values to 
+                    ## make the vectors equal in length
+                    else:
+                        filtered_data_left=np.vstack((filtered_data_left[0:len(final_data)],final_data))
+                        filtered_data_left=np.transpose(filtered_data_left)
+                        
+            
+
+            ## If data is forward right
+
+            if motion_index[0]==6:
+
+                ## Initialise the x values 
+                if index==0:
+                    
+                    filtered_data_right=final_data
+
+                ## Adding the y values 
+                else:                    
+
+                    ## Check if x values are less than y values if so filter out the exrta y values to 
+                    ## make the vectors equal in length
+                    if len(filtered_data_right)<= len(final_data):
+                        filtered_data_right=np.vstack((filtered_data_right,final_data[0:len(final_data)]))
+                        filtered_data_right=np.transpose(filtered_data_right)
+                    
+                        
+
+                    ## Check if y values are less than x values if so filter out the extra x values to 
+                    ## make the vectors equal in length
+                    else:
+                        filtered_data_right=np.vstack((filtered_data_right[0:len(final_data)],final_data))
+                        filtered_data_right=np.transpose(filtered_data_right)  
+                        
+
+
+
+
+    ## Looking for vector with shortest lenght        
+    min_motion_lenth=np.min([len(filtered_data_forward),len(filtered_data_left),len(filtered_data_right)])
+
+    ## Resize all accoding to min length
+    filtered_data=np.hstack((filtered_data_forward[0:min_motion_lenth,:],filtered_data_left[0:min_motion_lenth,:],filtered_data_right[0:min_motion_lenth,:]))
+ 
+    
+
+    return filtered_data
+
+
+def general_outlier_removal(data, pp1, pp2):
+    '''
+
+        This is the general 2 stage outlier removal
+        This is not used for this assignment
         Based on "Data Outlier Detection using the Chebyshev Theorem",
         Brett G. Amidan, Thomas A. Ferryman, and Scott K. Cooley
 
@@ -468,6 +632,6 @@ if __name__=='__main__':
     group_4_data,other_group_data=load_data()
     all_group_data=np.vstack((group_4_data,other_group_data))
     
-    fitered_all_data=remove_outliers(all_group_data,0.1,0.01)
+    fitered_all_data=remove_outliers(all_group_data,2)
  
     gaussian_distribution(fitered_all_data)
