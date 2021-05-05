@@ -3,7 +3,7 @@
 
 
 import numpy as np
-from scipy.stats import norm,iqr
+from scipy.stats import norm,iqr,chisquare
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
@@ -380,6 +380,28 @@ def gaussian_distribution(data,plot_title):
     plt.show()
 
 
+def chi_square(data):
+    '''
+    
+    
+    '''
+
+    observed_data=data
+    n_bins=int(round((np.max(data)-np.min(data))/(2*iqr(data)*len(data)**(-1/3))))
+    observed_freq,_=np.histogram(observed_data,bins=n_bins)
+    mu = np.mean(observed_data)
+    std= np.std(observed_data)
+    expected_data=np.random.normal(mu,std,len(data))
+    expected_freq,_ = np.histogram(expected_data, bins=len(observed_freq))
+
+    
+
+    return chisquare(observed_freq,expected_freq)
+
+
+
+
+
 #########################
 ##Action functions
 ########################
@@ -538,6 +560,51 @@ def compute_PCA(data):
         ax_nstd.legend()
         ax_nstd.grid()
         plt.show()
+
+
+
+def calculate_chi(data):
+    '''
+    
+    
+    '''
+
+
+    for motion_index in range(0,9):
+        current_motion=data[:,motion_index]
+        
+        if motion_index==0:
+            plot_title="Forward motion x direction"            
+
+        if motion_index==1:
+            plot_title="Forward motion y direction"
+
+        if motion_index==2:
+            plot_title="Forward motion theta"
+
+        if motion_index==3:
+            plot_title="Left motion x direction"        
+
+        if motion_index==4:
+            plot_title="Left motion y direction"
+
+        if motion_index==5:
+            plot_title="Left motion theta direction"
+
+        if motion_index==6:
+            plot_title="Right motion x direction"
+
+        if motion_index==7:
+            plot_title="Right motion y direction"
+
+        if motion_index==8:
+            plot_title="Right motion theta direction"
+
+        chi_stat,p_value=chi_square(current_motion)
+
+        print(f'For motion {plot_title} chi stat is {chi_stat} and p value is {p_value}')
+
+    
         
           
 
@@ -553,5 +620,9 @@ if __name__=='__main__':
     # compare_gauss_vs_hist(all_group_data)
     # plot_ellipsis(all_group_data)
     # compute_PCA(all_group_data)
+
+    calculate_chi(all_group_data)
+   
+
 
     
