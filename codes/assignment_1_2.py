@@ -15,22 +15,22 @@ def load_all_measurement_data():
 
 
 
-    forward_measurements1=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_1_reading/front_measurement.csv',delimiter=',',skip_header=1)
-    left_measurements1=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_1_reading/left_measurement.csv',delimiter=',',skip_header=1)
-    right_measurements1=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_1_reading/right_measurement.csv',delimiter=',',skip_header=1)
+    forward_measurements1=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_1_reading/front_measurement.csv',delimiter=',',skip_header=1)
+    left_measurements1=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_1_reading/left_measurement.csv',delimiter=',',skip_header=1)
+    right_measurements1=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_1_reading/right_measurement.csv',delimiter=',',skip_header=1)
 
-    forward_measurements2=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_2_reading/Forward.csv',delimiter=',',skip_header=1)
-    left_measurements2=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_2_reading/Left.csv',delimiter=',',skip_header=1)
-    right_measurements2=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_2_reading/Right.csv',delimiter=',',skip_header=1)
+    forward_measurements2=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_2_reading/Forward.csv',delimiter=',',skip_header=1)
+    left_measurements2=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_2_reading/Left.csv',delimiter=',',skip_header=1)
+    right_measurements2=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_2_reading/Right.csv',delimiter=',',skip_header=1)
 
-    forward_measurements3=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_3_reading/straight_end_poses.csv',delimiter=',',skip_header=1)
+    forward_measurements3=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_3_reading/straight_end_poses.csv',delimiter=',',skip_header=1)
     forward_measurements3=forward_measurements3[:,1:]
-    left_measurements3=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_3_reading/left_end_poses.csv',delimiter=',',skip_header=1)
+    left_measurements3=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_3_reading/left_end_poses.csv',delimiter=',',skip_header=1)
     left_measurements3=left_measurements3[:,1:]
-    right_measurements3=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_3_reading/right_end_poses.csv',delimiter=',',skip_header=1)
+    right_measurements3=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_3_reading/right_end_poses.csv',delimiter=',',skip_header=1)
     right_measurements3=right_measurements3[:,1:]
 
-    all_measurements5=np.genfromtxt('../data/Other_team_data/Assignment_1_2/group_5_reading/lego_table_template.csv',delimiter=',',skip_header=1)
+    all_measurements5=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_5_reading/lego_table_template.csv',delimiter=',',skip_header=1)
     forward_mesurements5=all_measurements5[1:22,5:8]
     left_measurements5=all_measurements5[1:22,1:4]
     right_measurements5=all_measurements5[1:22,9:14]
@@ -54,9 +54,9 @@ def load_measurement_data():
 
 
 
-    forward_measurements=np.genfromtxt('../data/measurements/pain_forward.csv',delimiter=',',skip_header=1)
-    left_measurements=np.genfromtxt('../data/measurements/pain_left.csv',delimiter=',',skip_header=1)
-    right_measurements=np.genfromtxt('../data/measurements/pain_right.csv',delimiter=',',skip_header=1)
+    forward_measurements=np.genfromtxt('../data/Assignment_1_2/measurements/pain_forward.csv',delimiter=',',skip_header=1)
+    left_measurements=np.genfromtxt('../data/Assignment_1_2/measurements/pain_left.csv',delimiter=',',skip_header=1)
+    right_measurements=np.genfromtxt('../data/Assignment_1_2/measurements/pain_right.csv',delimiter=',',skip_header=1)
     
 
 
@@ -72,13 +72,13 @@ def load_log_data(motion_type):
     
     '''
     if motion_type=='f':
-        directory='../data/forward_logs'
+        directory='../data/Assignment_1_2/forward_logs'
 
     if motion_type=='l':
-        directory='../data/left_logs'
+        directory='../data/Assignment_1_2/left_logs'
 
     if motion_type=='r':
-        directory='../data/right_logs'
+        directory='../data/Assignment_1_2/right_logs'
     
 
     filename_counter=1
@@ -245,6 +245,7 @@ def plot_log_data(log_forward,log_left,log_right):
 
     
     ax2.set(title="Robot Path from logged data",xlabel="X(cm)",ylabel="Y(cm)")
+    ax2.axis('equal')
     plt.legend()
     plt.grid()
 
@@ -366,8 +367,9 @@ def plot_all_measurements(pose_forward,pose_left,pose_right,pose_forward1,pose_l
     plt.xlim([x_min-30,x_max+30])
     plt.ylim([-5,y_max+30])
     ax1.set(title="Measured Movements",xlabel="X(cm)",ylabel="Y(cm)")
-    plt.legend()
-    plt.grid()
+    ax1.grid()
+    ax1.axis('equal')
+    plt.legend()   
     plt.show()
       
 
@@ -427,6 +429,7 @@ def plot_measurement(pose_forward,pose_left,pose_right):
     plt.xlim([x_min-30,x_max+30])
     plt.ylim([-5,y_max+30])
     ax1.set(title="Measured Movements",xlabel="X(cm)",ylabel="Y(cm)")
+    ax1.set_aspect('equal')
     plt.legend()
     plt.grid()
     plt.show()
@@ -437,7 +440,7 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     keys=['t1','t2','t3']
 
 
-    figure1=plt.figure(figsize=(6,12))
+    figure1=plt.figure()
     ax1=figure1.add_subplot(111)
 
 
@@ -458,16 +461,15 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
         ax1.quiver(last_pos[0],last_pos[1],last_dir[0],last_dir[1])
 
     ax1.set(title="Measured Movements vs Log Data of Forward Motion ",xlabel="X(cm)",ylabel="Y(cm)")
+    ax1.grid()
+    ax1.axis('equal')
 
 
-    figure2=plt.figure(figsize=(6,12))
+
+
+
+    figure2=plt.figure()
     ax2=figure2.add_subplot(111)
-
-   
-
-
-
-
     ##Left
 
     #Fiding the direction vectors u & v from the angles
@@ -490,6 +492,8 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
 
 
     ax2.set(title="Measured Movements vs Log Data of Left Motion ",xlabel="X(cm)",ylabel="Y(cm)")
+    ax2.grid()
+    ax2.axis('equal')
 
    
 
@@ -500,7 +504,7 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     #Fiding the direction vectors u & v from the angles
 
 
-    figure3=plt.figure(figsize=(6,12))
+    figure3=plt.figure()
     ax3=figure3.add_subplot(111)
 
     u_r=-1.0*np.sin(np.deg2rad(pose_right[0:3,2]))
@@ -524,17 +528,9 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
 
     ax3.quiver(0,0,0,1,label='Start')
     ax3.set(title="Measured Movements vs Log Data of Right Motion ",xlabel="X(cm)",ylabel="Y(cm)")
-
-    
-
-
-
-
-
-
-
+    ax3.grid()
+    ax3.axis('equal')
     plt.legend()
-    plt.grid()
     plt.show()
 
 
@@ -556,7 +552,7 @@ if __name__=='__main__':
     measured_pose_right   = transform_mesurement_2_pose(right_mesurements)
    
      
-    plot_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right)
+    # plot_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right)
 
     #Load log data from EV3
     forward_log=load_log_data('f')
@@ -594,10 +590,10 @@ if __name__=='__main__':
     
 
 
-    plot_all_measurements(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_mesurements1,left_mesurements1,right_mesurements1,\
-        forward_mesurements2,left_mesurements2,right_mesurements2,\
-            forward_mesurements3,left_mesurements3,right_mesurements3,\
-                forward_mesurements5,left_mesurements5,right_mesurements5)
+    # plot_all_measurements(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_mesurements1,left_mesurements1,right_mesurements1,\
+    #     forward_mesurements2,left_mesurements2,right_mesurements2,\
+    #         forward_mesurements3,left_mesurements3,right_mesurements3,\
+    #             forward_mesurements5,left_mesurements5,right_mesurements5)
 
 
   

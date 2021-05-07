@@ -44,10 +44,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes"
+CMAKE_SOURCE_DIR = "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes"
+CMAKE_BINARY_DIR = "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1"
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -74,14 +74,14 @@ clean: CMakeFiles/Assignment_3_1.dir/clean
 CMakeFiles/Assignment_3_1.dir/all:
 	$(MAKE) -f CMakeFiles/Assignment_3_1.dir/build.make CMakeFiles/Assignment_3_1.dir/depend
 	$(MAKE) -f CMakeFiles/Assignment_3_1.dir/build.make CMakeFiles/Assignment_3_1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/CMakeFiles" --progress-num=1,2 "Built target Assignment_3_1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/CMakeFiles" --progress-num=1,2 "Built target Assignment_3_1"
 .PHONY : CMakeFiles/Assignment_3_1.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Assignment_3_1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/CMakeFiles" 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Assignment_3_1.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/CMakeFiles" 0
 .PHONY : CMakeFiles/Assignment_3_1.dir/rule
 
 # Convenience name for target.

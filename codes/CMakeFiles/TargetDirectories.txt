@@ -1,3 +1,0 @@
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/CMakeFiles/rebuild_cache.dir
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/CMakeFiles/Assignment_3_1.dir
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/CMakeFiles/edit_cache.dir

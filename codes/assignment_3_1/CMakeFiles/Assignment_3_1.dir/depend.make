@@ -3,8 +3,6 @@
 
 CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o: assignment_3_1.cpp
 CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o: /opt/ros/melodic/include/opencv-3.3.1-dev/opencv/cxcore.h
-CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o: /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/aruco.hpp
-CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o: /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/aruco/dictionary.hpp
 CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o: /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/calib3d.hpp
 CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o: /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/calib3d/calib3d_c.h
 CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o: /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core.hpp

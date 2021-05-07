@@ -6,37 +6,21 @@
 
 #IncludeRegexTransform: 
 
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1.cpp
+/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/assignment_3_1.cpp
 opencv2/core.hpp
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/opencv2/core.hpp
+/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/opencv2/core.hpp
 opencv2/imgcodecs.hpp
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/opencv2/imgcodecs.hpp
+/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/opencv2/imgcodecs.hpp
 opencv2/imgproc.hpp
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/opencv2/imgproc.hpp
-opencv2/aruco.hpp
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/opencv2/aruco.hpp
+/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/opencv2/imgproc.hpp
 opencv2/highgui.hpp
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/opencv2/highgui.hpp
-opencv2/calib3d.hpp
-/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/opencv2/calib3d.hpp
+/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1/opencv2/highgui.hpp
 iostream
 -
 
 /opt/ros/melodic/include/opencv-3.3.1-dev/opencv/cxcore.h
 opencv2/core/core_c.h
 /opt/ros/melodic/include/opencv-3.3.1-dev/opencv/opencv2/core/core_c.h
-
-/opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/aruco.hpp
-opencv2/core.hpp
--
-vector
--
-opencv2/aruco/dictionary.hpp
-/opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/opencv2/aruco/dictionary.hpp
-
-/opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/aruco/dictionary.hpp
-opencv2/core.hpp
--
 
 /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/calib3d.hpp
 opencv2/core.hpp
