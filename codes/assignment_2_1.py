@@ -235,8 +235,27 @@ def remove_outliers(data,std_no,plot_title):
     ## Outlier  detection value lower bound
     odv1l = mu - k * sigma
     ##Filter out outliers from upper and lower bounds
-    final_data = data[np.where(data <= odv1u)[0]]
-    final_data = final_data[np.where(final_data >= odv1l)[0]]
+
+    stage1_data = data[np.where(data <= odv1u)[0]]
+    stage1_data = stage1_data[np.where(stage1_data >= odv1l)[0]]
+
+     ##Mean and standard deviation of data
+    mu2 = np.mean(stage1_data)
+    sigma2 = np.std(stage1_data)
+
+    ## k is the no of standard deviations
+    
+    k=std_no
+    ## Outlier detection value upper bound
+    odv2u = mu2 + k * sigma2
+    ## Outlier  detection value lower bound
+    odv2l = mu2 - k * sigma2
+    ##Filter out outliers from upper and lower bounds
+
+
+
+    final_data = data[np.where(stage1_data <= odv2u)[0]]
+    final_data = final_data[np.where(final_data >= odv2l)[0]]
 
     ##No of data poitns after filter
     fil_data_count=len(final_data)
@@ -617,11 +636,11 @@ if __name__=='__main__':
     group_4_data,other_group_data=load_data()
     all_group_data=np.vstack((group_4_data,other_group_data))
 
-    # compare_gauss_vs_hist(all_group_data)
+    compare_gauss_vs_hist(all_group_data)
     # plot_ellipsis(all_group_data)
     # compute_PCA(all_group_data)
 
-    calculate_chi(all_group_data)
+    # calculate_chi(all_group_data)
    
 
 

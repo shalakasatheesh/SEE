@@ -203,8 +203,10 @@ def print_data_to_txt(file_name,data_to_file,file_path='../data/'):
 
 def plot_log_data(log_forward,log_left,log_right):
 
-    figure2=plt.figure(figsize=(6,12))
+    figure2=plt.figure(figsize=(12,12))
     ax2=figure2.add_subplot(111)
+    ax2.set(title="Robot Path from logged data",xlabel="X(cm)",ylabel="Y(cm)")
+    ax2.axis('equal')
     
 
     ax2.scatter(log_forward['t1'][:,0],log_forward['t1'][:,1],color='tab:blue',s=1,label='Trial_1-Forward')
@@ -244,8 +246,7 @@ def plot_log_data(log_forward,log_left,log_right):
     ax2.quiver(0,0,0,1)
 
     
-    ax2.set(title="Robot Path from logged data",xlabel="X(cm)",ylabel="Y(cm)")
-    ax2.axis('equal')
+   
     plt.legend()
     plt.grid()
 
@@ -462,7 +463,8 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
 
     ax1.set(title="Measured Movements vs Log Data of Forward Motion ",xlabel="X(cm)",ylabel="Y(cm)")
     ax1.grid()
-    ax1.axis('equal')
+    ax1.axis('square')
+    # ax1.gca().set_aspect('equal', adjustable='box')
 
 
 
@@ -493,7 +495,8 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
 
     ax2.set(title="Measured Movements vs Log Data of Left Motion ",xlabel="X(cm)",ylabel="Y(cm)")
     ax2.grid()
-    ax2.axis('equal')
+    ax2.axis('square')
+    # ax2.gca().set_aspect('equal', adjustable='box')
 
    
 
@@ -529,8 +532,12 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     ax3.quiver(0,0,0,1,label='Start')
     ax3.set(title="Measured Movements vs Log Data of Right Motion ",xlabel="X(cm)",ylabel="Y(cm)")
     ax3.grid()
-    ax3.axis('equal')
+    ax3.axis('square')
     plt.legend()
+    # plt.gca().set_aspect('equal', adjustable='box')
+    # plt.draw()
+
+    
     plt.show()
 
 
@@ -576,6 +583,8 @@ if __name__=='__main__':
     right_t3['t1']=right_log['get_1']
     right_t3['t2']=right_log['get_2']
     right_t3['t3']=right_log['get_7']
+
+    # plot_log_data(forward_t3,left_t3,right_t3)
 
    
     plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
