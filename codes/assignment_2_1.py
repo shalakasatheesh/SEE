@@ -115,6 +115,8 @@ def load_data():
 
     ##All other team data
 
+
+    ## Team 1 has same format as us so no need to convert
     
     forward_measurements1=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_1_reading/front_measurement.csv',delimiter=',',skip_header=1)
     left_measurements1=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_1_reading/left_measurement.csv',delimiter=',',skip_header=1)
@@ -127,8 +129,7 @@ def load_data():
     right_measurements2=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_2_reading/Right.csv',delimiter=',',skip_header=1)
 
 
-    ##Convert Team 3 angles staring from y axis and anti-clockwise postive
-
+    ## Team 3 has has taken clock wise positive so have to convert it to anti-clock wise positive to fit our teams definition of coordinate 
     forward_measurements3=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_3_reading/straight_end_poses.csv',delimiter=',',skip_header=1)
     forward_measurements3=forward_measurements3[:,1:]
     left_measurements3=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_3_reading/left_end_poses.csv',delimiter=',',skip_header=1)
@@ -138,7 +139,7 @@ def load_data():
 
 
     
-
+    ## We are team 4
 
 
     ##Team 5 has a different format in csv therefore have to filter it and had to convert angles to starting from y axis and anticlockwise positive
@@ -149,6 +150,8 @@ def load_data():
     right_measurements5=all_measurements5[1:22,9:14]
 
 
+
+    ## Making group 3 and group 5 orienation anti-clock wise poisitive
     for index in range(len(forward_measurements3)):
         forward_measurements3[index,2]=-1*forward_measurements3[index,2]
         left_measurements3[index,2]=-1*left_measurements3[index,2]
@@ -161,7 +164,7 @@ def load_data():
 
 
     
-    ## Team 6 has distances in cm and angles in rads therefore have to convert it 
+    ## Team 6 has distances in angles in rads therefore have to convert it to deg
     
     forward_measurements6=np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_6_reading/straight_readings.csv',delimiter=' ',skip_header=1)
     left_measurements6=   np.genfromtxt('../data/Assignment_1_2/Other_team_data/group_6_reading/left_readings.csv',    delimiter='',skip_header=1)
@@ -176,13 +179,22 @@ def load_data():
     ##Combine all group data
 
     
-    forward_measurements_all=np.concatenate((forward_measurements1,forward_measurements3,forward_measurements5,forward_measurements6),axis=0)
+    # forward_measurements_all=np.concatenate((forward_measurements1,forward_measurements3,forward_measurements5,forward_measurements6),axis=0)
 
     
-    left_measurements_all=np.concatenate((left_measurements1,left_measurements3,left_measurements5,left_measurements6),axis=0)
+    # left_measurements_all=np.concatenate((left_measurements1,left_measurements3,left_measurements5,left_measurements6),axis=0)
     
     
-    right_measurements_all=np.concatenate((right_measurements1,right_measurements3,right_measurements5,right_measurements6),axis=0)
+    # right_measurements_all=np.concatenate((right_measurements1,right_measurements3,right_measurements5,right_measurements6),axis=0)
+
+    forward_measurements_all=np.concatenate((forward_measurements1,forward_measurements3,forward_measurements6),axis=0)
+
+    
+    left_measurements_all=np.concatenate((left_measurements1,left_measurements3,left_measurements6),axis=0)
+    
+    
+    right_measurements_all=np.concatenate((right_measurements1,right_measurements3,right_measurements6),axis=0)
+
 
 
    
@@ -261,7 +273,7 @@ def remove_outliers(data,std_no,plot_title):
     fil_data_count=len(final_data)
 
 
-    print(f'Filtered data summart for {plot_title}\nStart data points: {ori_data_count} Outliers:{ori_data_count-fil_data_count}\n')
+    print(f'Filtered data summary for {plot_title}\nStart data points: {ori_data_count} Outliers:{ori_data_count-fil_data_count}\n')
 
 
     return final_data
@@ -466,8 +478,11 @@ def compare_gauss_vs_hist(data):
 
 
         fitered_data=remove_outliers(current_motion,2,plot_title) 
+        # print(f'Length of current{len(current_motion)} and filter {len(fitered_data)}')
+        ## The cause for shitty outliers could be that group 5 with weird data
         
         gaussian_distribution(fitered_data,plot_title)
+        
 
 
 def plot_ellipsis(data):
