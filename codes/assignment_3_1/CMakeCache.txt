@@ -215,6 +215,9 @@ Camera_calibration_BINARY_DIR:STATIC=/home/malika/Documents/Bonn Stuff/SEE/Repor
 //Value Computed by CMake
 Camera_calibration_SOURCE_DIR:STATIC=/home/malika/Documents/Bonn Stuff/SEE/Report/SEE/codes/assignment_3_1
 
+//The directory containing a CMake configuration file for Eigen3.
+Eigen3_DIR:PATH=/usr/lib/cmake/eigen3
+
 //The directory containing a CMake configuration file for OpenCV.
 OpenCV_DIR:PATH=/opt/ros/melodic/share/OpenCV-3.3.1-dev
 
