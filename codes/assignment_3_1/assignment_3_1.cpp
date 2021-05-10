@@ -1,18 +1,30 @@
+
+// Open Cv libraries 
 #include "opencv2/core.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <opencv2/calib3d/calib3d.hpp>
 
+
+//opecv lib for eigen mat conversion. These two need to be imported in this order for this to work
+#include <Eigen/Core>
+#include <opencv2/core/eigen.hpp> 
+
+//Eigen(cpp equivalent for numpy)
+
 #include "Eigen/Dense"
 
-
+//General libraries
 #include <iostream>
+#include <string>
+#include <unistd.h>
 
 
 using namespace std;
 using namespace cv;
 using namespace Eigen;
+
 
 
 
@@ -24,6 +36,9 @@ int chessboard[2]={7,7};// Size of the chessboard
                         // But apparently not //Dimensions of the checker board 7,7
 
 
+Mat undis_test;
+
+
 
 //Function to uses
 
@@ -33,6 +48,11 @@ void stream_camera(int argv);
 
 int main(int argc , char** argv)
 {
+    char file_path[256];
+
+    getcwd(file_path,256);
+    cout<<"The file path"<<file_path<<endl;
+
 
 
   //  To run the code , type
@@ -41,7 +61,7 @@ int main(int argc , char** argv)
     // Since we need to declare a 3D point of the image
     // We define a vector of a vector each element being able to store 3 floating points that relate images 
     // 2D point to a real world 3D point
-    // Unlike arrays size of vecotors can increase dyanmically
+    // Unlike arrays size of vectors can increase dyanmically
    std::vector<std::vector<cv::Point3f>> objpoints;
 
    //Create a vector to save 2D point of the chess board image
@@ -95,6 +115,8 @@ int main(int argc , char** argv)
         //convert to grayscale
         cvtColor(original,gray,CV_BGR2GRAY);
 
+        
+
         //finding corners
         if_sucess=findChessboardCorners(gray,cv::Size(chessboard[0],chessboard[1]),corner_points, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FAST_CHECK | CV_CALIB_CB_NORMALIZE_IMAGE);
         
@@ -128,9 +150,16 @@ int main(int argc , char** argv)
        if(if_sucess)
        {
 
+           if(i==0)
+           {
+
+
+               undis_test=imread(images[i]);
+           }
+
            //Set the termination criteria for fiding corners at subpixel level
            TermCriteria stop_critera(CV_TERMCRIT_EPS| CV_TERMCRIT_ITER,30,0.001);
-
+            
             //Perform the subpixel level corner detection
            cornerSubPix(gray,corner_points,cv::Size(11,11),cv::Size(-1,-1),stop_critera);
 
@@ -151,6 +180,16 @@ int main(int argc , char** argv)
            waitKey(20);
        }     
 
+        else
+        {
+
+            
+            cout<<"could not find chess board for "<<images[i]<<endl;
+        }
+
+    
+
+
 
     }
 
@@ -158,23 +197,77 @@ int main(int argc , char** argv)
 
     Mat cameraMat,dist_coefficent,R,T;
 
+    
+    //CamMat: Camera intrinsic properties
+    // dist_coe : camera distortion coeffcients(radial and tangential)
+    // R,T : the roatioan and translation wrt cam
+
+    /*
+    Tangential distortion: Tangential distortion occurs mainly because the lens is not parallely aligned 
+    to the imaging plane, that makes the image to be extended a little while longer or tilted, it makes 
+    the objects appear farther away or even closer than they actually are.
+    p1 n p2 are tangential distortion coefficients
+
+
+
+    Radial Distortion: Radial Distortion is the most common type that affects the images, In which when a
+     camera captured pictures of straight lines appeared slightly curved or bent
+     k1-k6 are radial
+
+     k1>0 barrel 
+     k1<0 pincusshsion
+
+
+
+     In the functions below the coefficients are passed or returned as:
+
+    (k_1, k_2, p_1, p_2, k_3 [, k_4, k_5, k_6])
+
+    k4-k6 are ignored in opencv
+
+     vector. That is, if the vector contains four elements, it means that k_3=0 . 
+     The distortion coefficients do not depend on the scene viewed
+    */
+
     calibrateCamera(objpoints,imgpoints,cv::Size(gray.rows,gray.cols),cameraMat,dist_coefficent,R,T);
+    cv::Size size_R=R.size();
+
 
     std::cout << "cameraMatrix : \n" << cameraMat << std::endl;
     cout<<""<<endl;
-    std::cout << "distCoeffs : \n" << dist_coefficent << std::endl;
+    cout << "distCoeffs : \n" << dist_coefficent << std::endl;
     cout<<""<<endl;
     cout<<""<<endl;
     cout<<""<<endl;
-    std::cout << "Rotation vector : \n" << R << std::endl;
+    cout << "Rotation vector : \n" << R << std::endl;
     cout<<""<<endl;
     cout<<""<<endl;
     cout<<""<<endl;
-    std::cout << "Translation vector : \n" << T << std::endl;
+    cout << "Translation vector : \n" << T << std::endl;
+    cout<<""<<endl;
+    cout<<""<<endl;
+    cout<<"Size of R (and T) matrix :"<<size_R<<endl;
 
+    
 
+    //Create an eigen mat and conver the cv mat to eigen for test
+     MatrixXf eigemat;
+     cv::cv2eigen(cameraMat,eigemat);
+     cout<<"The eigne : \n"<<eigemat<<endl;
+    
+ 
 
+    //For an example take the first image of the test data and undistort it to see the affect of distorion
+    Mat undistored_out;
+    cv::undistort(undis_test,undistored_out,cameraMat,dist_coefficent);
+    hconcat(undis_test, undistored_out, undistored_out);
+    cvNamedWindow("Before and after undistorion",WINDOW_KEEPRATIO);
+    imshow("Before and after undistorion",undistored_out);
+    waitKey(0);
+   
+    
 
+ 
 
     // Test code for Eigen
 

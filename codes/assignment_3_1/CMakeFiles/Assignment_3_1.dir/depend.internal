@@ -20,6 +20,7 @@ CMakeFiles/Assignment_3_1.dir/assignment_3_1.cpp.o
  /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core/cvdef.h
  /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core/cvstd.hpp
  /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core/cvstd.inl.hpp
+ /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core/eigen.hpp
  /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core/fast_math.hpp
  /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core/hal/interface.h
  /opt/ros/melodic/include/opencv-3.3.1-dev/opencv2/core/mat.hpp
