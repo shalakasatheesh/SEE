@@ -88,6 +88,10 @@ def load_log_data(motion_type):
     for filename in os.listdir(directory):
         with open(os.path.join(directory,filename), 'r') as f: # open in read only mode
             current_filename='get_'+str(filename_counter)
+            # cond_1=(filename_counter==2 or filename_counter==1 or filename_counter==7)
+            # cond_2=(motion_type=='r')
+            # if cond_1 and cond_2:
+            #     print(f'for {motion_type} motion file{filename_counter} has name {filename}')
             
             
             if (filename_counter<8):
@@ -566,7 +570,7 @@ if __name__=='__main__':
     left_log=load_log_data('l')
     right_log=load_log_data('r')
     
-    ##Load first three into a new 
+    ##Load first three into a new data strcuture
     forward_t3={}
     forward_t3['t1']=forward_log['get_1']
     forward_t3['t2']=forward_log['get_4']
@@ -584,10 +588,14 @@ if __name__=='__main__':
     right_t3['t2']=right_log['get_2']
     right_t3['t3']=right_log['get_7']
 
-    # plot_log_data(forward_t3,left_t3,right_t3)
+
+
+
+
+    plot_log_data(forward_t3,left_t3,right_t3)
 
    
-    plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
+    # plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
 
   
     forward_mesurements1,left_mesurements1,right_mesurements1,\
@@ -599,10 +607,10 @@ if __name__=='__main__':
     
 
 
-    # plot_all_measurements(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_mesurements1,left_mesurements1,right_mesurements1,\
-    #     forward_mesurements2,left_mesurements2,right_mesurements2,\
-    #         forward_mesurements3,left_mesurements3,right_mesurements3,\
-    #             forward_mesurements5,left_mesurements5,right_mesurements5)
+    plot_all_measurements(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_mesurements1,left_mesurements1,right_mesurements1,\
+        forward_mesurements2,left_mesurements2,right_mesurements2,\
+            forward_mesurements3,left_mesurements3,right_mesurements3,\
+                forward_mesurements5,left_mesurements5,right_mesurements5)
 
 
   

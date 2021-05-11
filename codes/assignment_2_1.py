@@ -652,7 +652,7 @@ if __name__=='__main__':
     all_group_data=np.vstack((group_4_data,other_group_data))
 
     compare_gauss_vs_hist(all_group_data)
-    # plot_ellipsis(all_group_data)
+    plot_ellipsis(all_group_data)
     # compute_PCA(all_group_data)
 
     # calculate_chi(all_group_data)
