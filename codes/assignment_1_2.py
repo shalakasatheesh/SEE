@@ -396,7 +396,7 @@ def plot_measurement(pose_forward,pose_left,pose_right):
 
 
     
-    figure1=plt.figure(figsize=(4,8))
+    figure1=plt.figure(figsize=(8,8))
     ax1=figure1.add_subplot(111)
 
 
@@ -445,7 +445,7 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     keys=['t1','t2','t3']
 
 
-    figure1=plt.figure()
+    figure1=plt.figure(figsize=(8,8))
     ax1=figure1.add_subplot(111)
 
 
@@ -467,14 +467,15 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
 
     ax1.set(title="Measured Movements vs Log Data of Forward Motion ",xlabel="X(cm)",ylabel="Y(cm)")
     ax1.grid()
-    ax1.axis('square')
+    ax1.legend()
+    ax1.axis('equal')
     # ax1.gca().set_aspect('equal', adjustable='box')
 
 
 
 
 
-    figure2=plt.figure()
+    figure2=plt.figure(figsize=(8,8))
     ax2=figure2.add_subplot(111)
     ##Left
 
@@ -499,7 +500,8 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
 
     ax2.set(title="Measured Movements vs Log Data of Left Motion ",xlabel="X(cm)",ylabel="Y(cm)")
     ax2.grid()
-    ax2.axis('square')
+    ax2.axis('equal')
+    ax2.legend()
     # ax2.gca().set_aspect('equal', adjustable='box')
 
    
@@ -511,7 +513,7 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     #Fiding the direction vectors u & v from the angles
 
 
-    figure3=plt.figure()
+    figure3=plt.figure(figsize=(8,8))
     ax3=figure3.add_subplot(111)
 
     u_r=-1.0*np.sin(np.deg2rad(pose_right[0:3,2]))
@@ -536,7 +538,7 @@ def plot_n_measurement(pose_forward,pose_left,pose_right,log_forward,log_left,lo
     ax3.quiver(0,0,0,1,label='Start')
     ax3.set(title="Measured Movements vs Log Data of Right Motion ",xlabel="X(cm)",ylabel="Y(cm)")
     ax3.grid()
-    ax3.axis('square')
+    ax3.axis('equal')
     plt.legend()
     # plt.gca().set_aspect('equal', adjustable='box')
     # plt.draw()
@@ -592,10 +594,10 @@ if __name__=='__main__':
 
 
 
-    plot_log_data(forward_t3,left_t3,right_t3)
+   # plot_log_data(forward_t3,left_t3,right_t3)
 
    
-    # plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
+    plot_n_measurement(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_t3,left_t3,right_t3)
 
   
     forward_mesurements1,left_mesurements1,right_mesurements1,\
@@ -607,10 +609,10 @@ if __name__=='__main__':
     
 
 
-    plot_all_measurements(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_mesurements1,left_mesurements1,right_mesurements1,\
-        forward_mesurements2,left_mesurements2,right_mesurements2,\
-            forward_mesurements3,left_mesurements3,right_mesurements3,\
-                forward_mesurements5,left_mesurements5,right_mesurements5)
+    # plot_all_measurements(measured_pose_forwards,measured_pose_left,measured_pose_right,forward_mesurements1,left_mesurements1,right_mesurements1,\
+    #     forward_mesurements2,left_mesurements2,right_mesurements2,\
+    #         forward_mesurements3,left_mesurements3,right_mesurements3,\
+    #             forward_mesurements5,left_mesurements5,right_mesurements5)
 
 
   
