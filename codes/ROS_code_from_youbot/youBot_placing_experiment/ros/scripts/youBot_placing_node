@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+import youBot_placing_experiment_ros.youBot_placing
+
+if __name__ == '__main__':
+    youBot_placing_experiment_ros.youBot_placing.main()
